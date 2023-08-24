@@ -1,19 +1,17 @@
 {
   "root": true,
-  "ignorePatterns": [
-    "**/*"
-  ],
-  "plugins": [
-    "@nx"
-  ],
+  "ignorePatterns": ["**/*"],
+  "plugins": ["@nx", "simple-import-sort", "import", "prettier"],
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".ts", ".js"]
+      }
+    }
+  },
   "overrides": [
     {
-      "files": [
-        "*.ts",
-        "*.tsx",
-        "*.js",
-        "*.jsx"
-      ],
+      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
       "rules": {
         "@nx/enforce-module-boundaries": [
           "error",
@@ -21,44 +19,38 @@
             "enforceBuildableLibDependency": true,
             "allow": [],
             "depConstraints": [
-              {
-                "sourceTag": "*",
-                "onlyDependOnLibsWithTags": [
-                  "*"
-                ]
-              }
+              { "sourceTag": "*", "onlyDependOnLibsWithTags": ["*"] }
             ]
           }
-        ]
+        ],
+        "simple-import-sort/imports": "error",
+        "simple-import-sort/exports": "error",
+        "sort-imports": "off",
+        "import/first": "error",
+        "import/no-cycle": "error",
+        "import/newline-after-import": "error",
+        "import/no-duplicates": "error",
+        "@typescript-eslint/quotes": ["error", "single", { "avoidEscape": true }],
+        "@typescript-eslint/semi": ["error", "always"],
+        "@typescript-eslint/indent": ["error", 2]
       }
     },
     {
-      "files": [
-        "*.ts",
-        "*.tsx"
-      ],
-      "extends": [
-        "plugin:@nx/typescript"
-      ],
+      "files": ["*.ts", "*.tsx"],
+      "extends": ["plugin:@nx/typescript"],
+      "parserOptions": {
+        "project": "./tsconfig.*?.json",
+        "sourceType": "module"
+      },
       "rules": {}
     },
     {
-      "files": [
-        "*.js",
-        "*.jsx"
-      ],
-      "extends": [
-        "plugin:@nx/javascript"
-      ],
+      "files": ["*.js", "*.jsx"],
+      "extends": ["plugin:@nx/javascript"],
       "rules": {}
     },
     {
-      "files": [
-        "*.spec.ts",
-        "*.spec.tsx",
-        "*.spec.js",
-        "*.spec.jsx"
-      ],
+      "files": ["*.spec.ts", "*.spec.tsx", "*.spec.js", "*.spec.jsx"],
       "env": {
         "jest": true
       },

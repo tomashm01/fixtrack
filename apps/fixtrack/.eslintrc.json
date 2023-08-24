@@ -1,32 +1,56 @@
 {
-  "extends": [
-    "../../.eslintrc.json"
-  ],
-  "ignorePatterns": [
-    "!**/*"
-  ],
+  "root": true,
+  "ignorePatterns": ["**/*"],
+  "plugins": ["@nx", "simple-import-sort", "import", "prettier"],
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".ts"]
+      }
+    }
+  },
   "overrides": [
     {
-      "files": [
-        "*.ts",
-        "*.tsx",
-        "*.js",
-        "*.jsx"
-      ],
+      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
+      "rules": {
+        "@nx/enforce-module-boundaries": [
+          "error",
+          {
+            "enforceBuildableLibDependency": true,
+            "allow": [],
+            "depConstraints": [
+              { "sourceTag": "*", "onlyDependOnLibsWithTags": ["*"] }
+            ]
+          }
+        ],
+        "simple-import-sort/imports": "error",
+        "simple-import-sort/exports": "error",
+        "sort-imports": "off",
+        "import/first": "error",
+        "import/no-cycle": "error",
+        "import/newline-after-import": "error",
+        "import/no-duplicates": "error",
+        "@typescript-eslint/quotes": [
+          "error",
+          "single",
+          { "avoidEscape": true }
+        ],
+        "@typescript-eslint/semi": "error",
+        "@typescript-eslint/indent": ["error", 2]
+      }
+    },
+    {
+      "files": ["*.ts", "*.tsx"],
+      "extends": ["plugin:@nx/typescript"],
+      "parserOptions": {
+        "project": "./tsconfig.*?.json",
+        "sourceType": "module"
+      },
       "rules": {}
     },
     {
-      "files": [
-        "*.ts",
-        "*.tsx"
-      ],
-      "rules": {}
-    },
-    {
-      "files": [
-        "*.js",
-        "*.jsx"
-      ],
+      "files": ["*.js", "*.jsx"],
+      "extends": ["plugin:@nx/javascript"],
       "rules": {}
     }
   ]
