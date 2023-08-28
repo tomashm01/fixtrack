@@ -3,21 +3,15 @@ import { Nullable } from '@fixtrack/domain';
 import { Inject } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
-import { UserRepository, userRepository } from '../../domain';
 import { GetUsersQuery } from './get-users.query';
+import { USER_FINDER, UserFinder } from '../service/user-finder.service';
 
 @QueryHandler(GetUsersQuery)
 export class GetUsersHandler implements IQueryHandler<GetUsersQuery> {
-  constructor(@Inject(userRepository) private users: UserRepository) {}
+  constructor(@Inject(USER_FINDER)
+  private readonly userFinder: UserFinder) {}
 
   async execute(): Promise<Nullable<Array<UserDTO>>> {
-    const users = await this.users.findAll();
-
-    return users.map(user => ({
-      id: user.id.value,
-      email: user.email.value,
-      password: user.password.value,
-      role: user.role.value,
-    }));
+    return this.userFinder.findAll();
   }
 }

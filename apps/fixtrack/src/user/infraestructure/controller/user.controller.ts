@@ -1,27 +1,19 @@
 import { Controller, Get, Post } from '@nestjs/common';
-import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { UserService } from '../service/user.service';
+import { UserDTO } from '@fixtrack/contracts';
 
 @ApiTags('UserController')
 @Controller('user')
 export class UserController {
 
-  constructor(
-    private queryBus: QueryBus,
-    private commandBus: CommandBus
-  ) {}
+  constructor(private readonly userService: UserService) {}
 
   @Get()
   @ApiOperation({ summary: 'Obtener todos los usuarios' })
   @ApiResponse({ status: 200, description: 'Users found.' })
-  findAll(): string {
-    return 'Devuelve algo';
+  findAll(): Promise<Array<UserDTO>> {
+    return this.userService.getUsers();
   }
 
-  @Post()
-  @ApiOperation({ summary: 'Crear un usuario' })
-  @ApiResponse({ status: 200, description: 'User created.' })
-  create(): string {
-    return 'Devuelve algo';
-  }
 }

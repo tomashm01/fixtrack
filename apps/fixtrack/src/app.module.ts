@@ -1,9 +1,9 @@
-import { Module, DynamicModule, MiddlewareConsumer, NestModule } from '@nestjs/common';
+import { Module, MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { AppLoggerMiddleware } from './app.middleware';
-import { UserModule } from './user';
+import { BootstrapModule } from './bootstrap.module';
 
 @Module({
-  imports: [UserModule.forRoot()],
+  imports: [BootstrapModule],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

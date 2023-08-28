@@ -1,2 +1,10 @@
-export * from './get-users.handler';
-export * from './get-users.query';
+import { GetUsersHandler } from "./get-users.handler";
+import { GetUsersQuery } from "./get-users.query";
+
+export const QueryHandlers=[
+  GetUsersHandler,
+];
+
+export const Queries=[
+  GetUsersQuery,
+];
