@@ -23,7 +23,6 @@ export class User extends AggregateRoot {
     role: UserRole
   ): User {
     const user = new User();
-
     user.apply(
       new UserWasCreated(userId.value, email.value, password.value, role.value)
     );

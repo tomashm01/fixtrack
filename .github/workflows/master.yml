@@ -32,6 +32,4 @@ jobs:
         docker-compose up -d  # Ejecuta en modo "detached" para que el comando retorne inmediatamente
     - name: Esperar a que los servicios estén disponibles
       run: sleep 30
-    - run: npm ci
-    - run: npm run build --if-present
     - run: npm test

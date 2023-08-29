@@ -6,6 +6,8 @@ services:
       - "3333:3333"
     environment:
       - PORT=3333
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
     depends_on:
       - mongo
       - redis
@@ -13,16 +15,36 @@ services:
     volumes:
       - .:/app 
       - /app/node_modules
+    networks:
+      - network
+
   mongo:
     image: "mongo"
     ports:
       - "27017:27017"
+
   redis:
     image: "redis"
+    restart: always
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
     ports:
-      - "6379:6379"
+      - '6379:6379'
+    volumes:
+      - cache:/data
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+    networks:
+      - network
   rabbitmq:
     image: "rabbitmq:management"
     ports:
       - "5672:5672"
       - "15672:15672"
+
+networks:
+  network:
+    driver: bridge
+
+volumes:
+  cache:
+    driver: local
+

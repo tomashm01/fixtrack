@@ -4,6 +4,7 @@ import { CqrsModule } from '@nestjs/cqrs';
 import { ConsoleModule } from 'nestjs-console';
 import configuration from './conf/configuration';
 import { UserModule } from './user';
+import { RedisModule } from './redis.service';
 
 
 @Module({
@@ -21,6 +22,7 @@ import { UserModule } from './user';
     CqrsModule,
     ConsoleModule,
     UserModule,
+    RedisModule,
   ],
 })
 export class BootstrapModule { }
