@@ -1,5 +1,5 @@
 import { UserDTO } from '@fixtrack/contracts';
-import { Document, Schema } from 'mongoose';
+import mongoose, { Document, Schema } from 'mongoose';
 
 export const USER_PROJECTION = 'users';
 
@@ -16,3 +16,4 @@ export const UserSchema = new Schema(
     versionKey: false,
   },
 );
+

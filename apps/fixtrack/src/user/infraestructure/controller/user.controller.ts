@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
 import { UserService } from '../service/user.service';
 import { CreateUserDTO, UserDTO } from '@fixtrack/contracts';
 
@@ -11,14 +11,15 @@ export class UserController {
 
   @Get()
   @ApiOperation({ summary: 'Obtener todos los usuarios' })
-  @ApiResponse({ status: 200, description: 'Users found.' })
+  @ApiResponse({ status: 200, description: 'Users found.', type: UserDTO  })
   findAll(): Promise<Array<UserDTO>> {
     return this.userService.getUsers();
   }
 
   @Post()
   @ApiOperation({ summary: 'Crear un usuario' })
-  @ApiResponse({ status: 200, description: 'User created' })
+  @ApiBody({ type: CreateUserDTO })
+  @ApiResponse({ status: 200, description: 'User created', type: UserDTO  })
   async create(
     @Body() createUserDto: CreateUserDTO
   ): Promise<UserDTO> {
