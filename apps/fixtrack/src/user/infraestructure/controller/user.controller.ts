@@ -1,7 +1,7 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { UserService } from '../service/user.service';
-import { UserDTO } from '@fixtrack/contracts';
+import { CreateUserDTO, UserDTO } from '@fixtrack/contracts';
 
 @ApiTags('UserController')
 @Controller('user')
@@ -14,6 +14,21 @@ export class UserController {
   @ApiResponse({ status: 200, description: 'Users found.' })
   findAll(): Promise<Array<UserDTO>> {
     return this.userService.getUsers();
+  }
+
+  @Post()
+  @ApiOperation({ summary: 'Crear un usuario' })
+  @ApiResponse({ status: 200, description: 'User created' })
+  async create(
+    @Body() createUserDto: CreateUserDTO
+  ): Promise<UserDTO> {
+    //const password = await this.authService.encodePassword(createUserDto.plainPassword);
+
+    return this.userService.createUser(
+      createUserDto.email,
+      createUserDto.password,
+      createUserDto.role
+    );
   }
 
 }

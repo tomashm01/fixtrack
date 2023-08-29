@@ -6,6 +6,11 @@ import configuration from './conf/configuration';
 import { UserModule } from './user';
 import { RedisModule } from './redis.service';
 
+import { MongooseModule } from '@nestjs/mongoose';
+import { Event, EventStoreModule } from '@aulasoftwarelibre/nestjs-eventstore';
+import { User, UserWasCreated } from './user/domain';
+import { CreateUserDTO } from '@fixtrack/contracts';
+
 
 @Module({
   imports: [
@@ -19,10 +24,18 @@ import { RedisModule } from './redis.service';
       isGlobal: true,
       load: [configuration],
     }),
+    MongooseModule.forRoot(process.env.MONGO_URI || '', {}),
+    MongooseModule.forRoot(process.env.KEYSTORE_URI,{
+      connectionName: process.env.KEYSTORE,
+    }),
+    EventStoreModule.forRoot({
+      connection: process.env.EVENTSTORE_URI
+    })    ,
     CqrsModule,
     ConsoleModule,
     UserModule,
     RedisModule,
   ],
 })
+
 export class BootstrapModule { }

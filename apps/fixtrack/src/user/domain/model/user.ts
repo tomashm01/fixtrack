@@ -1,4 +1,5 @@
-import { AggregateRoot } from '@nestjs/cqrs';
+import { AggregateRoot } from '@aulasoftwarelibre/nestjs-eventstore';
+
 
 import { UserWasCreated } from '../event';
 import { UserId } from './user-id';
@@ -12,9 +13,6 @@ export class User extends AggregateRoot {
   private _password: UserPassword;
   private _role: UserRole;
 
-  private constructor() {
-    super();
-  }
 
   public static add(
     userId: UserId,
@@ -30,7 +28,11 @@ export class User extends AggregateRoot {
     return user;
   }
 
-  get id(): UserId {
+  public aggregateId(): string {
+    return this._userId.value;
+  }
+
+  get userId(): UserId {
     return this._userId;
   }
 

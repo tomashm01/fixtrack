@@ -16,11 +16,9 @@ export class UserEmail extends ValueObject<Props> {
     if (email.length > UserEmail.maxLength) {
       throw new Error(`Email cannot be longer than ${UserEmail.maxLength} characters`);
     }
-
     if (!UserEmail.emailRegex.test(email)) {
       throw new Error('Email must be a valid email address');
     }
-
     return new UserEmail({ value: email });
   }
 

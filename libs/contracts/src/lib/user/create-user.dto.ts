@@ -1,7 +1,8 @@
 import { KnownRoles as Role} from '../auth';
 
 export class CreateUserDTO {
+  id: string;
   email: string;
-  plainPassword: string;
-  roles: Role;
+  password: string;
+  role: Role;
 }

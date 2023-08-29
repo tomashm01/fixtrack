@@ -1,7 +1,7 @@
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-
+import * as dotenv from 'dotenv';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
@@ -9,7 +9,7 @@ async function bootstrap() {
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
 
-  // Configuración de Swagger
+  dotenv.config();
   const config = new DocumentBuilder()
     .setTitle('Fixtrack API')
     .setVersion('1.0')

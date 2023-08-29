@@ -22,6 +22,36 @@ services:
     image: "mongo"
     ports:
       - "27017:27017"
+    volumes:
+      - type: volume
+        source: mongo-volume-data
+        target: /data/db
+    networks:
+      - network
+
+  eventstore:
+    image: eventstore/eventstore:20.10.2-buster-slim
+    environment:
+      - EVENTSTORE_CLUSTER_SIZE=1
+      - EVENTSTORE_RUN_PROJECTIONS=All
+      - EVENTSTORE_START_STANDARD_PROJECTIONS=true
+      - EVENTSTORE_EXT_TCP_PORT=1113
+      - EVENTSTORE_EXT_HTTP_PORT=2113
+      - EVENTSTORE_INSECURE=true
+      - EVENTSTORE_ENABLE_EXTERNAL_TCP=true
+      - EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP=true
+    ports:
+      - '1113:1113'
+      - '2113:2113'
+    volumes:
+      - type: volume
+        source: eventstore-volume-data
+        target: /var/lib/eventstore
+      - type: volume
+        source: eventstore-volume-logs
+        target: /var/log/eventstore
+    networks:
+      - network
 
   redis:
     image: "redis"
@@ -45,6 +75,9 @@ networks:
     driver: bridge
 
 volumes:
+  mongo-volume-data:
+  eventstore-volume-data:
+  eventstore-volume-logs:
   cache:
     driver: local
 
