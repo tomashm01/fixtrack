@@ -13,6 +13,7 @@ import { EventStoreModule, Event } from '@aulasoftwarelibre/nestjs-eventstore';
 import { ProjectionHandlers, USER_PROJECTION, UserSchema } from './projection';
 import { User, UserWasCreated } from '../domain';
 import { CreateUserDTO } from '@fixtrack/contracts';
+import { UserRedisService } from './service/userRedis.service';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { CreateUserDTO } from '@fixtrack/contracts';
     ...ProjectionHandlers,
     UserService,
     RedisModule,
+    UserRedisService
   ],
   exports: [],
 })
