@@ -23,16 +23,8 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
 
-    - name: Instalar Docker Compose
-      run: sudo apt-get install docker-compose
-
-    - name: Construir y levantar contenedores
+    # Runs multiple commands using the "|" operator
+    - name: 'Run tests'
       run: |
-        docker-compose build
-        docker-compose up -d  # Ejecuta en modo "detached" para que el comando retorne inmediatamente
-    - name: Esperar a que los servicios estén disponibles
-      run: sleep 30
-    - name: Instalar dependencias
-      run: npm install
-    - name: Ejecutar tests
-      run: npm run test
+        npm i
+        npm run test
