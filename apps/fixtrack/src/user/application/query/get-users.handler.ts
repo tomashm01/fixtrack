@@ -11,7 +11,7 @@ export class GetUsersHandler implements IQueryHandler<GetUsersQuery> {
   constructor(@Inject(USER_FINDER)
   private readonly userFinder: UserFinder) {}
 
-  async execute(): Promise<Nullable<Array<UserDTO>>> {
+  async execute(): Promise<Nullable<UserDTO[]>> {
     return this.userFinder.findAll();
   }
 }

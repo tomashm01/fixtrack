@@ -14,6 +14,7 @@ import { ProjectionHandlers, USER_PROJECTION, UserSchema } from './projection';
 import { User, UserWasCreated } from '../domain';
 import { CreateUserDTO } from '@fixtrack/contracts';
 import { UserRedisService } from './service/userRedis.service';
+import { UserFinderService, UserMongoFinder } from './service';
 
 @Module({
   imports: [
@@ -37,7 +38,9 @@ import { UserRedisService } from './service/userRedis.service';
     ...ProjectionHandlers,
     UserService,
     RedisModule,
-    UserRedisService
+    UserRedisService,
+    UserMongoFinder,
+    UserFinderService
   ],
   exports: [],
 })

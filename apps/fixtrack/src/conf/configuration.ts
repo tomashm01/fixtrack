@@ -1,6 +1,6 @@
 export default () => ({
   database: {
-    uri: process.env.DATABASE_URL || 'mongodb://mongodb:27017/database',
+    uri: process.env.DATABASE_URL || 'mongodb://mongodb:27017/fixtrack',
   },
   eventstore: {
     category: process.env.EVENTSTORE_STREAM,

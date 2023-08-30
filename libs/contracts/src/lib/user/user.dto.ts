@@ -2,7 +2,8 @@ import { ApiProperty } from "@nestjs/swagger";
 import { KnownRoles } from "../auth";
 
 interface Props {
-  _id: string;
+  _id?: string;
+  id?: string;
   email: string;
   password: string;
   role: string;
@@ -11,7 +12,7 @@ interface Props {
 export class UserDTO {
 
   constructor(props:Props){
-    this.id = props._id;
+    this.id = props._id || props.id;
     this.email = props.email;
     this.password = props.password;
     this.role = props.role;

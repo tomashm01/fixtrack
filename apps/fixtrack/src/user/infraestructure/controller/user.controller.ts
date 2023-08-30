@@ -1,10 +1,10 @@
-import { Body, ConflictException, Controller, Get, Post } from '@nestjs/common';
+import { Body, ConflictException, Controller, Get, NotFoundException, Param, Post } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiOkResponse } from '@nestjs/swagger';
 
 
 import { UserService } from '../service/user.service';
 import { CreateUserDTO, UserDTO } from '@fixtrack/contracts';
-import { IdAlreadyRegisteredError } from '@aulasoftwarelibre/nestjs-eventstore';
+import { IdAlreadyRegisteredError, IdNotFoundError } from '@aulasoftwarelibre/nestjs-eventstore';
 import { catchError } from '../../../utils';
 
 @ApiTags('UserController')
@@ -18,6 +18,21 @@ export class UserController {
   @ApiOkResponse({ type: UserDTO })
   findAll(): Promise<UserDTO[] | null> {
     return this.userService.getUsers();
+  }
+
+  @Get(':id')
+  @ApiOperation({ summary: 'Obtener un usuario por id' })
+  @ApiOkResponse({ type: UserDTO })
+  async findOne(@Param('id') id: string): Promise<UserDTO | null> {
+    try {
+      return await this.userService.getUserById(id);
+    } catch (e) {
+      if (e instanceof IdNotFoundError) {
+        throw new NotFoundException('User not found');
+      } else {
+        throw catchError(e);
+      }
+    }
   }
 
   @Post()
@@ -37,7 +52,6 @@ export class UserController {
         throw catchError(e);
       }
     }
-    
   }
 
 }

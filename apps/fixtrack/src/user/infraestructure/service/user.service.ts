@@ -3,6 +3,7 @@ import { Injectable } from "@nestjs/common";
 import { CreateUserDTO, UserDTO } from "@fixtrack/contracts";
 import { GetUsersQuery } from "../../application/query/get-users.query";
 import { CreateUserCommand } from "../../application/command/create-user.command";
+import { GetUserByIdQuery } from "../../application/query/get-user-by-id.query";
 
 @Injectable()
 export class UserService {
@@ -12,7 +13,7 @@ export class UserService {
   ) { }
 
   async getUsers(): Promise<UserDTO[]> {
-    return await this.queryBus.execute<IQuery, Array<UserDTO>>(new GetUsersQuery());
+    return await this.queryBus.execute<IQuery, UserDTO[]>(new GetUsersQuery());
   }
 
   async createUser(userdto: CreateUserDTO) : Promise<UserDTO> {
@@ -20,4 +21,7 @@ export class UserService {
     return new UserDTO({...userdto});
   }
 
+  async getUserById(id: string): Promise<UserDTO | null> {
+    return await this.queryBus.execute<IQuery, UserDTO>(new GetUserByIdQuery(id));
+  }
 }

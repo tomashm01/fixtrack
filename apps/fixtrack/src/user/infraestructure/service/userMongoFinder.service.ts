@@ -3,12 +3,13 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from "@nestjs/mongoose";
 
 import { USER_PROJECTION, UserDocument } from "../projection";
-import { UserFinder } from "../../application/service/user-finder.service";
 import { UserDTO } from "@fixtrack/contracts";
 import { UserEmail, UserId } from "../../domain";
 
+export const USER_MONGO_FINDER = "UserMongoFinder";
+
 @Injectable()
-export class UserMongoFinder implements UserFinder{
+export class UserMongoFinder {
   constructor(
     @InjectModel(USER_PROJECTION) private readonly users: Model<UserDocument>,
   ) {}
@@ -23,9 +24,5 @@ export class UserMongoFinder implements UserFinder{
     return user ? new UserDTO(user) : null;
   }
 
-  async findById(id: UserId): Promise<UserDTO | null> {
-    const user = await this.users.findById(id.value).exec();
-    return user ? new UserDTO(user) : null;
-  }
 
 }
