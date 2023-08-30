@@ -16,7 +16,7 @@ export class UserController {
   @Get()
   @ApiOperation({ summary: 'Obtener todos los usuarios' })
   @ApiOkResponse({ type: UserDTO })
-  findAll(): Promise<UserDTO[]> {
+  findAll(): Promise<UserDTO[] | null> {
     return this.userService.getUsers();
   }
 
