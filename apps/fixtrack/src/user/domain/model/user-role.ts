@@ -6,7 +6,7 @@ interface Props {
 }
 
 export class UserRole extends ValueObject<Props> {
-  public static fromString(name: string): UserRole {
+  public static with(name: string): UserRole {
     if (name.length === 0) {
       throw new Error('Role cannot be empty');
     }

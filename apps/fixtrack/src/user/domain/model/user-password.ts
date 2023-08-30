@@ -5,7 +5,7 @@ interface Props {
 }
 
 export class UserPassword extends ValueObject<Props> {
-  public static fromString(name: string): UserPassword {
+  public static with(name: string): UserPassword {
     if (name.length < 8) {
       throw new Error('Password too short');
     }

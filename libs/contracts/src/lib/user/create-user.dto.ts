@@ -4,7 +4,7 @@ import { KnownRoles, KnownRoles as Role} from '../auth';
 
 export class CreateUserDTO {
   
-  id: string;
+  _id: string;
 
   @ApiProperty({
     example: 'john.doe@example.com',
@@ -23,5 +23,5 @@ export class CreateUserDTO {
     description: 'The role of the user',
     enum: KnownRoles
   })
-  role: Role;
+  role: string;
 }

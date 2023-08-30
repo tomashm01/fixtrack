@@ -1,12 +1,12 @@
-import { Id } from '@fixtrack/domain';
-import * as uuid from 'uuid';
+import { Id } from '@aulasoftwarelibre/nestjs-eventstore';
 
 export class UserId extends Id {
-  static generate(): UserId {
-    return new UserId(uuid.v4());
+
+  public static with(id: string): UserId {
+    return new UserId(id);
   }
 
-  public static fromString(id: string): UserId {
-    return new UserId(id);
+  get value(): string {
+    return this.props.value;
   }
 }

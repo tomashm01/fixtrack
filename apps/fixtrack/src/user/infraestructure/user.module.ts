@@ -25,7 +25,7 @@ import { CreateUserDTO } from '@fixtrack/contracts';
       },
     ]),
     EventStoreModule.forFeature([User],{
-      UserWasCreatedEvent:(event: Event<CreateUserDTO>) => new UserWasCreated(event.payload.id, event.payload.email, event.payload.password, event.payload.role),
+      UserWasCreated:(event: Event<CreateUserDTO>) => new UserWasCreated(event.payload._id, event.payload.email, event.payload.password, event.payload.role),
     })
   ],
   controllers: [UserController],

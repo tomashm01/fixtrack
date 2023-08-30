@@ -1,6 +1,8 @@
 import { Event } from '@aulasoftwarelibre/nestjs-eventstore';
 
-export class UserWasCreated extends Event {
+import { CreateUserDTO } from '@fixtrack/contracts';
+
+export class UserWasCreated extends Event<CreateUserDTO> {
   constructor(
     public readonly id: string,
     public readonly email: string,

@@ -49,9 +49,9 @@ export class User extends EncryptedAggregateRoot {
   }
 
   private onUserWasCreated(event: UserWasCreated) {
-    this._userId = UserId.fromString(event.id);
-    this._email = UserEmail.fromString(event.email);
-    this._password = UserPassword.fromString(event.password);
-    this._role = UserRole.fromString(event.role);
+    this._userId = UserId.with(event.id);
+    this._email = UserEmail.with(event.email);
+    this._password = UserPassword.with(event.password);
+    this._role = UserRole.with(event.role);
   }
 }
