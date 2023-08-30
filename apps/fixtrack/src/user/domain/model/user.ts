@@ -1,4 +1,4 @@
-import { AggregateRoot } from '@aulasoftwarelibre/nestjs-eventstore';
+import { EncryptedAggregateRoot } from '@aulasoftwarelibre/nestjs-eventstore';
 
 
 import { UserWasCreated } from '../event';
@@ -7,7 +7,7 @@ import { UserEmail } from './user-email';
 import { UserPassword } from './user-password';
 import { UserRole } from './user-role';
 
-export class User extends AggregateRoot {
+export class User extends EncryptedAggregateRoot {
   private _userId: UserId;
   private _email: UserEmail;
   private _password: UserPassword;
