@@ -12,7 +12,6 @@ export class UserRedisService {
 
   async findById(id: UserId): Promise<UserDTO | null> {
     const user = await this.redisService.get("user:" + id.value);
-    console.log(user);
     return user ? new UserDTO(JSON.parse(user)) : null;
   }
 
