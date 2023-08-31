@@ -24,4 +24,8 @@ export class UserService {
   async getUserById(id: string): Promise<UserDTO | null> {
     return await this.queryBus.execute<IQuery, UserDTO>(new GetUserByIdQuery(id));
   }
+
+  async getUserByEmail(email: string): Promise<UserDTO | null> {
+    return await this.queryBus.execute<IQuery, UserDTO>(new GetUserByIdQuery(email));
+  }
 }

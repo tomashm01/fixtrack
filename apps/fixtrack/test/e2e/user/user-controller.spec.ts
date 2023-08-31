@@ -14,7 +14,7 @@ describe('UserController (e2e)', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UserController],
-      providers: [UserService,UserService,
+      providers: [UserService,
         {
           provide: CommandBus, 
           useValue: {}, 
