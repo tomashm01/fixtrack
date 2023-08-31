@@ -15,11 +15,13 @@ import { User, UserWasCreated } from '../domain';
 import { CreateUserDTO } from '@fixtrack/contracts';
 import { UserRedisService } from './service/userRedis.service';
 import { UserFinderService, UserMongoFinder } from './service';
+import { AuthModule } from '../../auth/auth.module';
 
 @Module({
   imports: [
     CqrsModule,
     RedisModule,
+    AuthModule,
     MongooseModule.forFeature([
       {
         name: USER_PROJECTION,
@@ -40,8 +42,8 @@ import { UserFinderService, UserMongoFinder } from './service';
     RedisModule,
     UserRedisService,
     UserMongoFinder,
-    UserFinderService
+    UserFinderService,
   ],
-  exports: [],
+  exports: [UserService],
 })
 export class UserModule {}

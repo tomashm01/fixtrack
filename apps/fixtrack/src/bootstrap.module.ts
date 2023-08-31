@@ -7,9 +7,7 @@ import { UserModule } from './user';
 import { RedisModule } from './redis.service';
 
 import { MongooseModule } from '@nestjs/mongoose';
-import { Event, EventStoreModule } from '@aulasoftwarelibre/nestjs-eventstore';
-import { User, UserWasCreated } from './user/domain';
-import { CreateUserDTO } from '@fixtrack/contracts';
+import { EventStoreModule } from '@aulasoftwarelibre/nestjs-eventstore';
 
 
 @Module({
@@ -30,7 +28,7 @@ import { CreateUserDTO } from '@fixtrack/contracts';
     }),
     EventStoreModule.forRoot({
       connection: process.env.EVENTSTORE_URI
-    })    ,
+    }),
     CqrsModule,
     ConsoleModule,
     UserModule,

@@ -4,6 +4,7 @@ import { CreateUserDTO, UserDTO } from "@fixtrack/contracts";
 import { GetUsersQuery } from "../../application/query/get-users.query";
 import { CreateUserCommand } from "../../application/command/create-user.command";
 import { GetUserByIdQuery } from "../../application/query/get-user-by-id.query";
+import { GetUserByEmailQuery } from "../../application/query/get-user-by-email.query";
 
 @Injectable()
 export class UserService {
@@ -17,8 +18,7 @@ export class UserService {
   }
 
   async createUser(userdto: CreateUserDTO) : Promise<UserDTO> {
-    await this.commandBus.execute(new CreateUserCommand(userdto._id,userdto.email, userdto.password, userdto.role));
-    return new UserDTO({...userdto});
+    return await this.commandBus.execute(new CreateUserCommand(userdto._id,userdto.email, userdto.password, userdto.role));
   }
 
   async getUserById(id: string): Promise<UserDTO | null> {
@@ -26,6 +26,6 @@ export class UserService {
   }
 
   async getUserByEmail(email: string): Promise<UserDTO | null> {
-    return await this.queryBus.execute<IQuery, UserDTO>(new GetUserByIdQuery(email));
+    return await this.queryBus.execute<IQuery, UserDTO>(new GetUserByEmailQuery(email));
   }
 }

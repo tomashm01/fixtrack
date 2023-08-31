@@ -1,17 +1,21 @@
-import { Body, ConflictException, Controller, Get, NotFoundException, Param, Post } from '@nestjs/common';
+import { Body, ConflictException, Controller, Get, NotFoundException, Param, Post, UnauthorizedException } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiOkResponse } from '@nestjs/swagger';
 
 
 import { UserService } from '../service/user.service';
-import { CreateUserDTO, UserDTO } from '@fixtrack/contracts';
+import { CreateUserDTO, LoginDTO, TokenResponse, UserDTO } from '@fixtrack/contracts';
 import { IdAlreadyRegisteredError, IdNotFoundError } from '@aulasoftwarelibre/nestjs-eventstore';
 import { catchError } from '../../../utils';
+import { AuthService } from 'apps/fixtrack/src/auth/service/auth.service';
 
 @ApiTags('UserController')
 @Controller('user')
 export class UserController {
 
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly authService: AuthService,
+  ) {}
 
   @Get()
   @ApiOperation({ summary: 'Obtener todos los usuarios' })
@@ -42,9 +46,9 @@ export class UserController {
   async create(
     @Body() createUserDto: CreateUserDTO
   ): Promise<UserDTO> {
-    //const password = await this.authService.encodePassword(createUserDto.plainPassword);
     try {
-      return await this.userService.createUser(createUserDto);
+      const password :string = await this.authService.hashPassword(createUserDto.password);
+      return await this.userService.createUser({...createUserDto, password});
     } catch (e) {
       if (e instanceof IdAlreadyRegisteredError) {
         throw new ConflictException(e.message);
@@ -52,6 +56,26 @@ export class UserController {
         throw catchError(e);
       }
     }
+  }
+
+  @Post('login')
+  async login(@Body() loginDTO: LoginDTO) : Promise<TokenResponse> {
+    const { email, password } = loginDTO;
+
+    const user: UserDTO = await this.userService.getUserByEmail(email);
+
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+
+    const isValidPassword = await this.authService.validatePassword(password, user.password);
+    
+    if (!isValidPassword) {
+      throw new UnauthorizedException();
+    }
+
+    return new TokenResponse(await this.authService.generateToken(user.id));
+
   }
 
 }

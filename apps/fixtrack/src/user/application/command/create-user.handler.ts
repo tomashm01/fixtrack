@@ -15,7 +15,7 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
   @Inject(USER_FINDER) private readonly userFinder: UserFinder
   ) {}
 
-  async execute(command: CreateUserCommand) {
+  async execute(command: CreateUserCommand) : Promise<User> {
     const userId : UserId = UserId.with(command.id);
     const email= UserEmail.with(command.email);
     const password = UserPassword.with(command.password);
@@ -32,6 +32,8 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
     const user = User.add(userId, email, password, role);
 
     this.users.save(user);
+
+    return user;
 
   }
 }
