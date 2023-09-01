@@ -9,8 +9,7 @@ COPY ./package.json ./package-lock.json ./
 
 
 # Instalar las dependencias
-RUN --mount=type=cache,target=/root/.npm --mount=type=cache,target=/root/.cache npm ci
-
+RUN npm i 
 # ===============================
 # Crear una etapa para la API de Fixtrack
 

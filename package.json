@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "serve": "npx nx run-many --parallel --target=serve --projects=fixtrack",
+    "serve": "npx nx run-many --parallel --target=serve --projects=fixtrack,web",
     "test": "jest",
     "format": "prettier --write .",
     "lint": "eslint --fix ."
