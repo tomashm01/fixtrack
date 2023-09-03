@@ -65,13 +65,13 @@ export class UserController {
     const user: UserDTO = await this.userService.getUserByEmail(email);
 
     if (!user) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException("Login failed");
     }
 
     const isValidPassword = await this.authService.validatePassword(password, user.password);
     
     if (!isValidPassword) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException("Login failed");
     }
 
     return new TokenResponse(await this.authService.generateToken(user.id));
