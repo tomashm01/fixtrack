@@ -1,7 +1,9 @@
 export const ROUTES = {
-  HOME: '/fixtrack',
+  HOME: '/dashboard',
   PROFILE: '/profile',
   USER: '/user',
   WORDK_ORDER: '/order',
   DEVICE: '/device',
+  LOGOUT: '/login',
+  LOGIN: '/login',
 }

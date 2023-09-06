@@ -1,7 +1,35 @@
 import React from 'react';
-import { Box, Button, Input, VStack, Heading, Text } from '@chakra-ui/react';
+import cookie from 'cookie';
+import { Box, Button, Input, VStack, Heading, Text, Flex } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
+
 import useLogin from './hooks';
+import { GetServerSideProps } from 'next';
+import { getRole } from 'apps/web/services/auth';
+import Link from 'next/link';
+
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const parsedCookies = cookie.parse(context.req.headers.cookie || "");
+  const token = parsedCookies.token;
+
+  const role = await getRole(token);
+
+  if (role) {
+    return {
+      redirect: {
+        destination: '/dashboard',
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {}, 
+  }
+};
+
+
 
 const Login = () => {
   const { email, password,errorMsg, setEmail, setPassword, handleLogin } = useLogin();
@@ -36,6 +64,7 @@ const Login = () => {
           _hover={{ borderColor: 'dodgerblue' }}
           _focus={{ borderColor: 'dodgerblue', boxShadow: '0 0 5px dodgerblue' }}
         />
+        <Flex w="100%" justifyContent="space-around">
         <Button 
           onClick={handleLogin}
           background={email && password ? 'dodgerblue' : 'skyblue'}
@@ -45,6 +74,19 @@ const Login = () => {
         >
           Enviar
         </Button>
+        <Button 
+          onClick={handleLogin}
+          background={email && password ? 'dodgerblue' : 'skyblue'}
+          borderColor="skyblue"
+          _hover={{ bg: 'skyblue', color: 'white' }}
+          _active={{ bg: 'dodgerblue', color: 'white' }}
+        >
+          <Link href="/">
+            Volver al inicio
+          </Link>
+        </Button>
+        </Flex>
+        
       </VStack>
     </Box>
   );

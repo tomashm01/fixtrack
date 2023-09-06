@@ -1,7 +1,4 @@
 import Cookies from 'js-cookie';
-import cookie from 'cookie';
-
-import { GetServerSideProps } from 'next';
 
 const apiUrl= process.env.NEXT_PUBLIC_API_URL;
 
@@ -31,3 +28,6 @@ export const getRole = async (token:string|undefined) => {
   
 };
 
+export const removeToken = () => {
+  Cookies.remove("token");
+};

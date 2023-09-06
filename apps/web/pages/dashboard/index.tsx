@@ -1,4 +1,5 @@
 import { withAuth } from "../../hoc/index";
+import Navbar from "../layout/navbar";
 import AdminDashboard from "./components/adminDashboard";
 import CustomerDashboard from "./components/customerDashboard";
 import TechDashboard from "./components/techDashboard";
@@ -10,7 +11,12 @@ const dashboardMapper : Record<string,JSX.Element>={
 }
 
 const Dashboard = ({ role }: any) => {
-  return dashboardMapper[role];
+  return (
+    <>
+      <Navbar />
+      {dashboardMapper[role]}
+    </>
+  );
 };
 
 export const getServerSideProps = withAuth();
