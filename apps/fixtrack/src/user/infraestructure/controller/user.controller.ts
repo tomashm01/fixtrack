@@ -3,10 +3,11 @@ import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiOkResponse } from '@nes
 
 
 import { UserService } from '../service/user.service';
-import { CreateUserDTO, LoginDTO, TokenResponse, UserDTO } from '@fixtrack/contracts';
+import { CreateUserDTO, LoginDTO, RoleResponse, TokenResponse, UserDTO } from '@fixtrack/contracts';
 import { IdAlreadyRegisteredError, IdNotFoundError } from '@aulasoftwarelibre/nestjs-eventstore';
 import { catchError } from '../../../utils';
 import { AuthService } from 'apps/fixtrack/src/auth/service/auth.service';
+import { UserId } from '../../domain';
 
 @ApiTags('UserController')
 @Controller('user')
@@ -76,6 +77,17 @@ export class UserController {
 
     return new TokenResponse(await this.authService.generateToken(user.id));
 
+  }
+
+  @Post('validate-token')
+  async validateToken(@Body() token: TokenResponse) : Promise<RoleResponse> {
+    const userId:UserId= await this.authService.validateToken(token.token);
+
+    if(!userId){
+      throw new UnauthorizedException("Invalid token");
+    }
+
+    return new RoleResponse((await this.userService.getUserById(userId.value)).role);
   }
 
 }

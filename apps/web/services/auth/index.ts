@@ -1,19 +1,33 @@
+import Cookies from 'js-cookie';
+import cookie from 'cookie';
+
+import { GetServerSideProps } from 'next';
+
+const apiUrl= process.env.NEXT_PUBLIC_API_URL;
 
 export const setToken = (token: string) => {
-  localStorage.setItem('authToken', token);
+  Cookies.set("token",token);
 };
 
 export const getToken = () => {
-  return localStorage.getItem('authToken');
+  return Cookies.get("token");
 };
 
-export const isAuthenticated = () => {
-  const token = getToken();
-  // Aquí podrías verificar la validez del token si es necesario
-  return token != null;
+export const getRole = async (token:string|undefined) => {
+
+  const response = await fetch(`${apiUrl}/user/validate-token`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({token}),
+  });
+
+  const roleResponse = await response.json();
+
+  if (!roleResponse.role) return null;
+  
+  return roleResponse.role;
+  
 };
 
-export const checkRole = (allowedRoles: string[]) => {
-  // Aquí podrías verificar el rol del usuario si es necesario
-  return true;
-};

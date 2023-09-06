@@ -1,6 +1,7 @@
 import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { UserId } from '../../user/domain';
 
 
 @Injectable()
@@ -19,10 +20,10 @@ export class AuthService {
     return this.jwtService.sign({ userId });
   }
 
-  async validateToken(token: string): Promise<boolean> {
+  async validateToken(token: string): Promise<UserId> {
     try {
-      this.jwtService.verify(token);
-      return true;
+      const {userId}=this.jwtService.verify(token);
+      return UserId.with(userId);
     } catch (e) {
       this.logger.error(`Invalid token: ${e.message}`);
       throw new UnauthorizedException('Invalid token');
