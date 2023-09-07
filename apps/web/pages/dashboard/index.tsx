@@ -10,10 +10,14 @@ const dashboardMapper : Record<string,JSX.Element>={
   "TECNICO":<TechDashboard/>,
 }
 
-const Dashboard = ({ role }: any) => {
+interface DashboardProps {
+  role: string;
+}
+
+const Dashboard = ({role}:DashboardProps ) => {
   return (
     <>
-      <Navbar />
+      <Navbar role={role} />
       {dashboardMapper[role]}
     </>
   );
