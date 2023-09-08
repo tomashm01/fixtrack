@@ -1,7 +1,7 @@
 import { EncryptedAggregateRoot } from '@aulasoftwarelibre/nestjs-eventstore';
 
 
-import { UserWasCreated } from '../event';
+import { UserWasCreated, UserWasDeleted } from '../event';
 import { UserId } from './user-id';
 import { UserEmail } from './user-email';
 import { UserPassword } from './user-password';
@@ -12,6 +12,7 @@ export class User extends EncryptedAggregateRoot {
   private _email: UserEmail;
   private _password: UserPassword;
   private _role: UserRole;
+  private _deleted: boolean=false;
 
 
   public static add(
@@ -26,6 +27,10 @@ export class User extends EncryptedAggregateRoot {
     );
 
     return user;
+  }
+
+  delete(): void {
+    if (!this._deleted) this.apply(new UserWasDeleted(this._userId.value));
   }
 
   public aggregateId(): string {
@@ -48,10 +53,19 @@ export class User extends EncryptedAggregateRoot {
     return this._role;
   }
 
+  public get deleted(): boolean {
+    return this._deleted;
+  }
+
   private onUserWasCreated(event: UserWasCreated) {
     this._userId = UserId.with(event.id);
     this._email = UserEmail.with(event.email);
     this._password = UserPassword.with(event.password);
     this._role = UserRole.with(event.role);
   }
+
+  private onUserWasDeleted(event: UserWasDeleted) {
+    this._deleted = true;
+  }
+
 }

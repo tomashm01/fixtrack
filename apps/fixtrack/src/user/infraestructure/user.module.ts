@@ -11,8 +11,8 @@ import { RedisModule } from '../../redis.service';
 import { CommandHandlers } from '../application/command';
 import { EventStoreModule, Event } from '@aulasoftwarelibre/nestjs-eventstore';
 import { ProjectionHandlers, USER_PROJECTION, UserSchema } from './projection';
-import { User, UserWasCreated } from '../domain';
-import { CreateUserDTO } from '@fixtrack/contracts';
+import { User, UserId, UserWasCreated, UserWasDeleted } from '../domain';
+import { CreateUserDTO, DeleteUserDTO } from '@fixtrack/contracts';
 import { UserRedisService } from './service/userRedis.service';
 import { UserFinderService, UserMongoFinder } from './service';
 import { AuthModule } from '../../auth/auth.module';
@@ -30,6 +30,7 @@ import { AuthModule } from '../../auth/auth.module';
     ]),
     EventStoreModule.forFeature([User],{
       UserWasCreated:(event: Event<CreateUserDTO>) => new UserWasCreated(event.payload._id, event.payload.email, event.payload.password, event.payload.role),
+      UserWasDeleted:(event: Event<DeleteUserDTO>) => new UserWasDeleted(event.payload._id)
     })
   ],
   controllers: [UserController],

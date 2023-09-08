@@ -15,4 +15,9 @@ export class UserRedisService {
     return user ? new UserDTO(JSON.parse(user)) : null;
   }
 
+  async deleteUser(id: UserId): Promise<boolean> {
+    await this.redisService.del("user:" + id.value);
+    return true;
+  }
+
 }

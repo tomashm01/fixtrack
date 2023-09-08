@@ -32,5 +32,5 @@ export const useUsers = () => {
     fetchUsers();
   }, []);
 
-  return { users, loading, error };
+  return { users,setUsers, loading, error };
 };

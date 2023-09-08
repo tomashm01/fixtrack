@@ -23,5 +23,10 @@ export class UserFinderService implements UserFinder{
   async findByEmail(email: UserEmail): Promise<UserDTO | null> {
     return await this.mongoService.findByEmail(email);
   }
+
+  async deleteUser(id: UserId): Promise<void> {
+    await this.mongoService.deleteUser(id);
+    await this.redisService.deleteUser(id);
+  }
   
 }

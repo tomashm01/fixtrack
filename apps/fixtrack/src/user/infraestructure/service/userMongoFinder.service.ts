@@ -24,5 +24,10 @@ export class UserMongoFinder {
     return user ? new UserDTO(user) : null;
   }
 
+  async deleteUser(id: UserId): Promise<boolean> {
+    await this.users.deleteOne({_id:id.value}).exec();
+    return true;
+  }
+
 
 }

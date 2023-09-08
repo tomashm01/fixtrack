@@ -29,6 +29,10 @@ export class RedisService {
     return await this.redis.keys(pattern);
   }
 
+  async del(key: string): Promise<number> {
+    return await this.redis.del(key);
+  }
+
 }
 
 @Module({

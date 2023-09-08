@@ -1,13 +1,13 @@
-import { Body, ConflictException, Controller, Get, NotFoundException, Param, Post, UnauthorizedException } from '@nestjs/common';
+import { Body, ConflictException, Controller, Delete, Get, NotFoundException, Param, Post, UnauthorizedException } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiOkResponse } from '@nestjs/swagger';
 
 
 import { UserService } from '../service/user.service';
-import { CreateUserDTO, LoginDTO, RoleResponse, TokenResponse, UserDTO } from '@fixtrack/contracts';
+import { CreateUserDTO, LoginDTO, RoleResponse, TokenResponse, UserDTO, UserDeleteResponse } from '@fixtrack/contracts';
 import { IdAlreadyRegisteredError, IdNotFoundError } from '@aulasoftwarelibre/nestjs-eventstore';
 import { catchError } from '../../../utils';
 import { AuthService } from 'apps/fixtrack/src/auth/service/auth.service';
-import { UserId } from '../../domain';
+import { UserId, UserNotFoundError } from '../../domain';
 
 @ApiTags('UserController')
 @Controller('user')
@@ -53,6 +53,25 @@ export class UserController {
     } catch (e) {
       if (e instanceof IdAlreadyRegisteredError) {
         throw new ConflictException(e.message);
+      } else {
+        throw catchError(e);
+      }
+    }
+  }
+
+  @Delete(':id')
+  @ApiOperation({ summary: 'Eliminar un usuario por id' })
+  @ApiOkResponse({ type: UserId })
+  async delete(@Param('id') id: string): Promise<UserDeleteResponse> {
+    try {
+      await this.userService.deleteUser(UserId.with(id));
+      return {
+        id: id,
+        message: 'User deleted',
+      }
+    } catch (e) {
+      if (e instanceof UserNotFoundError) {
+        throw new NotFoundException('User not found');
       } else {
         throw catchError(e);
       }

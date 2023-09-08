@@ -6,6 +6,8 @@ import Navbar from '../layout/navbar';
 import { useUsers } from './hooks';
 import { useRouter } from 'next/router';
 
+const apiUrl = process.env.NEXT_PUBLIC_API_URL; 
+
 interface UserListProps {
   role: string;
 }
@@ -19,13 +21,27 @@ const UserList = (role:UserListProps) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [filter, setFilter] = useState('');
   const [pageSize, setPageSize] = useState(10);
-  const { users, loading, error } = useUsers();
+  const { users,setUsers, loading, error } = useUsers();
 
-  console.log(role)
-
-  const handleDelete = (id: number) => {
-    console.log(`Eliminar usuario con id: ${id}`);
+  const handleDelete = async (id: string) => {
+    try {
+      const response = await fetch(`${apiUrl}/user/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if (response.ok) {
+        const updatedUsers = users.filter((user) => user.id !== id);
+        setUsers(updatedUsers);
+      } else {
+        console.log("No se pudo eliminar el usuario");
+      }
+    } catch (error) {
+      console.log("Ocurrió un error al eliminar el usuario:", error);
+    }
   };
+  
 
   const filteredUsers = users.filter((user) => user.email.includes(filter));
   const totalPages = Math.ceil(filteredUsers.length / pageSize);
