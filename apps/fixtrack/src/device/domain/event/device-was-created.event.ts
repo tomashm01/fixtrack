@@ -9,6 +9,6 @@ export class DeviceWasCreated extends Event<DeviceDTO> {
     public readonly type: string,
     public readonly brand: string
   ) {
-    super(id, { id, model, type, brand });
+    super(id, {_id:id, model, type, brand });
   }
 }

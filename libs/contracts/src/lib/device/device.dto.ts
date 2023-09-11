@@ -3,7 +3,7 @@ import { Type } from "./type.enum";
 import { Brand } from "./brand.enum";
 
 interface Props {
-  id?: string;
+  _id?: string;
   model: string;
   type: string;
   brand: string;
@@ -12,7 +12,7 @@ interface Props {
 export class DeviceDTO {
 
   constructor(props:Props){
-    this.id = props.id;
+    this._id = props._id;
     this.model = props.model;
     this.type = props.type;
     this.brand = props.brand;
@@ -22,7 +22,7 @@ export class DeviceDTO {
     example: 'af727a9e-46ac-11ee-be56-0242ac120002',
     description: 'The id of the device',
   })
-  id: string;
+  _id: string;
 
   @ApiProperty({
     example: 'IPHONE 14 PRO',

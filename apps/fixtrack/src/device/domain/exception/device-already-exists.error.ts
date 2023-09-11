@@ -9,18 +9,6 @@ export class DeviceAlreadyExistsError extends DeviceError {
     );
   }
 
-  public static withBrand(brand:DeviceBrand): DeviceAlreadyExistsError {
-    return new DeviceAlreadyExistsError(
-      `Device with brand ${brand.value} already exists`,
-    );
-  }
-
-  public static withType(type:DeviceType): DeviceAlreadyExistsError {
-    return new DeviceAlreadyExistsError(
-      `Device with type ${type.value} already exists`,
-    );
-  }
-
   public static withModel(model:DeviceModel): DeviceAlreadyExistsError {
     return new DeviceAlreadyExistsError(
       `Device with model ${model.value} already exists`,

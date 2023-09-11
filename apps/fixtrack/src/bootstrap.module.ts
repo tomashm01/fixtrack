@@ -8,6 +8,7 @@ import { RedisModule } from './redis.service';
 
 import { MongooseModule } from '@nestjs/mongoose';
 import { EventStoreModule } from '@aulasoftwarelibre/nestjs-eventstore';
+import { DeviceModule } from './device';
 
 
 @Module({
@@ -33,6 +34,7 @@ import { EventStoreModule } from '@aulasoftwarelibre/nestjs-eventstore';
     ConsoleModule,
     UserModule,
     RedisModule,
+    DeviceModule
   ],
 })
 

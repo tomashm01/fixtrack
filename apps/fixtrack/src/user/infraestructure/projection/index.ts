@@ -1,5 +1,5 @@
 import { UserWasCreatedProjection } from './user-was-created.projection';
-import { UserWasDeletedProjection } from './user-was-delete.projection';
+import { UserWasDeletedProjection } from './user-was-deleted.projection';
 
 export * from './user.schema';
 
