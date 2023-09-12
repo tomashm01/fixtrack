@@ -14,7 +14,7 @@ export class DeviceWasDeletedProjection implements IEventHandler<DeviceWasDelete
 
   async handle(event: DeviceWasDeleted): Promise<void> {
     const userView = await this.deviceProjection.findById(event.id).exec();
-    await userView.deleteOne({ id: event.id});
+    await userView.deleteOne({ _id: event.id});
   }
 }
 

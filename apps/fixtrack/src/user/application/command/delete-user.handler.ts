@@ -15,7 +15,7 @@ export class DeleteUserHandler implements ICommandHandler<DeleteUserCommand> {
   @Inject(USER_FINDER) private readonly userFinder: UserFinder
   ) {}
 
-  async execute(command: DeleteUserCommand) : Promise<boolean> {
+  async execute(command: DeleteUserCommand) : Promise<void> {
     const userId : UserId = UserId.with(command.id);
 
     const userDto:UserDTO=await this.userFinder.findById(userId);
@@ -25,8 +25,6 @@ export class DeleteUserHandler implements ICommandHandler<DeleteUserCommand> {
     user.delete();
     
     this.users.save(user);
-
-    return true;
 
   }
 }

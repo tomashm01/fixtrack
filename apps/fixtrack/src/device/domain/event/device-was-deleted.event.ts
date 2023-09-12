@@ -5,7 +5,7 @@ export class DeviceWasDeleted extends Event {
     public readonly id: string,
   ) {
     super(id, {
-      id: id,
+      _id: id,
     });
   }
 }

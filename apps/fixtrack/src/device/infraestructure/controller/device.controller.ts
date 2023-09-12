@@ -2,13 +2,15 @@ import { Body, ConflictException, Controller, Delete, Get, NotFoundException, Pa
 import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiOkResponse } from '@nestjs/swagger';
 
 
-import { CreateUserDTO, DeviceDTO, LoginDTO, RoleResponse, TokenResponse, UserDTO, UserDeleteResponse } from '@fixtrack/contracts';
+import { CreateUserDTO, DeviceDTO, DeviceDeleteResponse, LoginDTO, RoleResponse, TokenResponse, UserDTO, UserDeleteResponse } from '@fixtrack/contracts';
 import { IdAlreadyRegisteredError, IdNotFoundError } from '@aulasoftwarelibre/nestjs-eventstore';
 import { catchError } from '../../../utils';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { GetDevicesQuery } from '../../application/query/get-devices.query';
-import { DeviceAlreadyExistsError } from '../../domain';
+import { DeviceAlreadyExistsError, DeviceId, DeviceNotFoundError } from '../../domain';
 import { CreateDeviceCommand } from '../../application/command/create-device.command';
+import { DeleteDeviceCommand } from '../../application/command/delete-device.command';
+import { GetDeviceByIdQuery } from '../../application/query/get-device-by-id.query';
 
 @ApiTags('DeviceController')
 @Controller('device')
@@ -44,43 +46,42 @@ export class DeviceController {
     }
   }
 
-  /*
-  @Get(':id')
-  @ApiOperation({ summary: 'Obtener un usuario por id' })
-  @ApiOkResponse({ type: UserDTO })
-  async findOne(@Param('id') id: string): Promise<UserDTO | null> {
-    try {
-      return await this.userService.getUserById(id);
-    } catch (e) {
-      if (e instanceof IdNotFoundError) {
-        throw new NotFoundException('User not found');
-      } else {
-        throw catchError(e);
-      }
-    }
-  }
-
-
+  
   @Delete(':id')
-  @ApiOperation({ summary: 'Eliminar un usuario por id' })
-  @ApiOkResponse({ type: UserId })
-  async delete(@Param('id') id: string): Promise<UserDeleteResponse> {
+  @ApiOperation({ summary: 'Eliminar un dispositivo por id' })
+  @ApiOkResponse({ type: DeviceId })
+  async delete(@Param('id') id: string): Promise<DeviceDeleteResponse> {
     try {
-      await this.userService.deleteUser(UserId.with(id));
+      await this.commandBus.execute(new DeleteDeviceCommand(id));
       return {
         id: id,
-        message: 'User deleted',
+        message: 'Device deleted',
       }
     } catch (e) {
-      if (e instanceof UserNotFoundError) {
-        throw new NotFoundException('User not found');
+      if (e instanceof DeviceNotFoundError) {
+        throw new NotFoundException(e.message);
       } else {
         throw catchError(e);
       }
     }
   }
 
-  */
+  @Get(':id')
+  @ApiOperation({ summary: 'Obtener un dispositivo por id' })
+  @ApiOkResponse({ type: DeviceDTO })
+  async findById(@Param('id') id: string): Promise<DeviceDTO> {
+    try {
+      return await this.queryBus.execute(new GetDeviceByIdQuery(id));
+    } catch (e) {
+      if (e instanceof DeviceNotFoundError) {
+        throw new NotFoundException(e.message);
+      } else {
+        throw catchError(e);
+      }
+    }
+  }
+
+  
 
 
 
