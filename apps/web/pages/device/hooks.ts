@@ -22,15 +22,12 @@ export const useDevices = () => {
     const fetchDevices = async () => {
       setLoading(true);
       try {
-        const response = await fetch(
-          `${apiURL}/device`,
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json',
-            },
+        const response = await fetch(`${apiURL}/device`, {
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json'
           }
-        );
+        });
         const data = await response.json();
         setDevices(data);
       } catch (e) {

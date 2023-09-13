@@ -1,4 +1,4 @@
-export enum Type{
+export enum Type {
   PHONE = 'PHONE',
   TABLET = 'TABLET',
   LAPTOP = 'LAPTOP',
@@ -6,5 +6,5 @@ export enum Type{
   HEADPHONES = 'HEADPHONES',
   KEYBOARD = 'KEYBOARD',
   MOUSE = 'MOUSE',
-  OTHER = 'OTHER',
+  OTHER = 'OTHER'
 }

@@ -15,7 +15,7 @@ async function bootstrap() {
     .setVersion('1.0')
     .addTag('My API tag')
     .build();
-  
+
   app.enableCors({
     credentials: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
@@ -26,7 +26,7 @@ async function bootstrap() {
       'Accept-Language',
       'Access-Control-Allow-Origin',
       'Access-Control-Allow-Methods',
-      'Access-Control-Allow-Headers',
+      'Access-Control-Allow-Headers'
     ],
     exposedHeaders: [
       'Content-Length',
@@ -34,17 +34,21 @@ async function bootstrap() {
       'Accept-Language',
       'Access-Control-Allow-Origin',
       'Access-Control-Allow-Methods',
-      'Access-Control-Allow-Headers',
-    ],
+      'Access-Control-Allow-Headers'
+    ]
   });
-  
+
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup(`${globalPrefix}/docs`, app, document);
 
   const port = process.env.PORT || 3333;
   await app.listen(port);
-  Logger.log(`🚀 Application is running on: http://localhost:${port}/${globalPrefix}`);
-  Logger.log(`📖 Swagger API documentation is running on: http://localhost:${port}/${globalPrefix}/docs`);
+  Logger.log(
+    `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`
+  );
+  Logger.log(
+    `📖 Swagger API documentation is running on: http://localhost:${port}/${globalPrefix}/docs`
+  );
 }
 
 bootstrap();

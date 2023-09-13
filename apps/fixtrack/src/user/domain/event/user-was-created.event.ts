@@ -7,7 +7,7 @@ export class UserWasCreated extends Event<CreateUserDTO> {
     public readonly id: string,
     public readonly email: string,
     public readonly password: string,
-    public readonly role: string,
+    public readonly role: string
   ) {
     super(id, { _id: id, email, password, role });
   }

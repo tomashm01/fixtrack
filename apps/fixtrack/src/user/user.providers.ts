@@ -1,12 +1,19 @@
-import { REDIS_SERVICE, RedisService } from "../redis.service";
-import { USER_FINDER } from "./application/service/user-finder.service";
-import { USER_REDIS_FINDER, UserFinderService, UserRedisService } from "./infraestructure/service";
-import { USER_MONGO_FINDER, UserMongoFinder } from "./infraestructure/service/userMongoFinder.service";
+import { REDIS_SERVICE, RedisService } from '../redis.service';
+import { USER_FINDER } from './application/service/user-finder.service';
+import {
+  USER_REDIS_FINDER,
+  UserFinderService,
+  UserRedisService
+} from './infraestructure/service';
+import {
+  USER_MONGO_FINDER,
+  UserMongoFinder
+} from './infraestructure/service/userMongoFinder.service';
 
 export const UserProviders = [
   {
     provide: USER_MONGO_FINDER,
-    useClass: UserMongoFinder,
+    useClass: UserMongoFinder
   },
   {
     provide: USER_REDIS_FINDER,
@@ -19,5 +26,5 @@ export const UserProviders = [
   {
     provide: REDIS_SERVICE,
     useClass: RedisService
-  },
+  }
 ];

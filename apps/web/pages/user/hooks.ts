@@ -11,15 +11,12 @@ export const useUsers = () => {
     const fetchUsers = async () => {
       setLoading(true);
       try {
-        const response = await fetch(
-          `${apiURL}/user`,
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json',
-            },
+        const response = await fetch(`${apiURL}/user`, {
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json'
           }
-        );
+        });
         const data = await response.json();
         setUsers(data);
       } catch (e) {
@@ -32,5 +29,5 @@ export const useUsers = () => {
     fetchUsers();
   }, []);
 
-  return { users,setUsers, loading, error };
+  return { users, setUsers, loading, error };
 };

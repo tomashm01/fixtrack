@@ -1,6 +1,6 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { Type } from "./type.enum";
-import { Brand } from "./brand.enum";
+import { ApiProperty } from '@nestjs/swagger';
+import { Type } from './type.enum';
+import { Brand } from './brand.enum';
 
 interface Props {
   _id?: string;
@@ -10,8 +10,7 @@ interface Props {
 }
 
 export class DeviceDTO {
-
-  constructor(props:Props){
+  constructor(props: Props) {
     this._id = props._id;
     this.model = props.model;
     this.type = props.type;
@@ -20,13 +19,13 @@ export class DeviceDTO {
 
   @ApiProperty({
     example: 'af727a9e-46ac-11ee-be56-0242ac120002',
-    description: 'The id of the device',
+    description: 'The id of the device'
   })
   _id: string;
 
   @ApiProperty({
     example: 'IPHONE 14 PRO',
-    description: 'The model of the device',
+    description: 'The model of the device'
   })
   model: string;
 

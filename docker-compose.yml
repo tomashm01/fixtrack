@@ -3,7 +3,7 @@ services:
   api:
     build: .
     ports:
-      - "3333:3333"
+      - '3333:3333'
     environment:
       - PORT=3333
       - REDIS_HOST=redis
@@ -13,15 +13,15 @@ services:
       - redis
       - rabbitmq
     volumes:
-      - .:/app 
+      - .:/app
       - /app/node_modules
     networks:
       - network
 
   mongo:
-    image: "mongo"
+    image: 'mongo'
     ports:
-      - "27017:27017"
+      - '27017:27017'
     volumes:
       - type: volume
         source: mongo-volume-data
@@ -54,9 +54,9 @@ services:
       - network
 
   redis:
-    image: "redis"
+    image: 'redis'
     restart: always
-    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    command: ['redis-server', '/usr/local/etc/redis/redis.conf']
     ports:
       - '6379:6379'
     volumes:
@@ -65,10 +65,10 @@ services:
     networks:
       - network
   rabbitmq:
-    image: "rabbitmq:management"
+    image: 'rabbitmq:management'
     ports:
-      - "5672:5672"
-      - "15672:15672"
+      - '5672:5672'
+      - '15672:15672'
 
 networks:
   network:
@@ -80,4 +80,3 @@ volumes:
   eventstore-volume-logs:
   cache:
     driver: local
-

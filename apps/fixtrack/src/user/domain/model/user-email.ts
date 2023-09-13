@@ -6,7 +6,7 @@ interface Props {
 
 export class UserEmail extends ValueObject<Props> {
   public static readonly maxLength: number = 255;
-  public static readonly emailRegex: RegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
+  public static readonly emailRegex: RegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   public static with(email: string): UserEmail {
     if (email.length === 0) {
@@ -14,7 +14,9 @@ export class UserEmail extends ValueObject<Props> {
     }
 
     if (email.length > UserEmail.maxLength) {
-      throw new Error(`Email cannot be longer than ${UserEmail.maxLength} characters`);
+      throw new Error(
+        `Email cannot be longer than ${UserEmail.maxLength} characters`
+      );
     }
     if (!UserEmail.emailRegex.test(email)) {
       throw new Error('Email must be a valid email address');

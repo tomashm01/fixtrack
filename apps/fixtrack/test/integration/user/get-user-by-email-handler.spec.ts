@@ -1,6 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import {GetUserByEmailHandler} from '../../../src/user/application/query/get-user-by-email.handler';
-import { USER_FINDER, UserFinder } from '../../../src/user/application/service/user-finder.service';
+import { GetUserByEmailHandler } from '../../../src/user/application/query/get-user-by-email.handler';
+import {
+  USER_FINDER,
+  UserFinder
+} from '../../../src/user/application/service/user-finder.service';
 import { UserEmail } from '../../../src/user/domain';
 import { GetUserByEmailQuery } from '../../../src/user/application/query/get-user-by-email.query';
 import { UserDTO } from '../../../../../libs/contracts/src';
@@ -14,15 +17,17 @@ describe('GetUserByEmailHandler', () => {
     const mockUserFinderProvider = {
       provide: USER_FINDER,
       useFactory: () => ({
-        findByEmail: jest.fn(),
-      }),
+        findByEmail: jest.fn()
+      })
     };
 
     const module: TestingModule = await Test.createTestingModule({
-      providers: [GetUserByEmailHandler, mockUserFinderProvider],
+      providers: [GetUserByEmailHandler, mockUserFinderProvider]
     }).compile();
 
-    getUserByEmailHandler = module.get<GetUserByEmailHandler>(GetUserByEmailHandler);
+    getUserByEmailHandler = module.get<GetUserByEmailHandler>(
+      GetUserByEmailHandler
+    );
     mockUserFinderService = module.get(USER_FINDER);
   });
 
@@ -34,7 +39,7 @@ describe('GetUserByEmailHandler', () => {
       id: '84750a21-6e17-4833-b76a-dbfe54cc1d85',
       email: 'john.doe@example.com',
       password: 'hashedPassword',
-      role: 'ADMIN',
+      role: 'ADMIN'
     };
 
     mockUserFinderService.findByEmail.mockResolvedValue(expectedUserDTO);

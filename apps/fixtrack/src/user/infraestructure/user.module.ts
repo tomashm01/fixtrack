@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { MongooseModule } from '@nestjs/mongoose';
 
-
 import { QueryHandlers } from '../application/query';
 import { UserProviders } from '../user.providers';
 import { UserService } from './service/user.service';
@@ -25,16 +24,23 @@ import { AuthModule } from '../../auth/auth.module';
     MongooseModule.forFeature([
       {
         name: USER_PROJECTION,
-        schema: UserSchema,
-      },
+        schema: UserSchema
+      }
     ]),
-    EventStoreModule.forFeature([User],{
-      UserWasCreated:(event: Event<CreateUserDTO>) => new UserWasCreated(event.payload._id, event.payload.email, event.payload.password, event.payload.role),
-      UserWasDeleted:(event: Event<DeleteUserDTO>) => new UserWasDeleted(event.payload._id)
+    EventStoreModule.forFeature([User], {
+      UserWasCreated: (event: Event<CreateUserDTO>) =>
+        new UserWasCreated(
+          event.payload._id,
+          event.payload.email,
+          event.payload.password,
+          event.payload.role
+        ),
+      UserWasDeleted: (event: Event<DeleteUserDTO>) =>
+        new UserWasDeleted(event.payload._id)
     })
   ],
   controllers: [UserController],
-  providers: [ 
+  providers: [
     ...QueryHandlers,
     ...CommandHandlers,
     ...UserProviders,
@@ -43,8 +49,8 @@ import { AuthModule } from '../../auth/auth.module';
     RedisModule,
     UserRedisService,
     UserMongoFinder,
-    UserFinderService,
+    UserFinderService
   ],
-  exports: [UserService],
+  exports: [UserService]
 })
 export class UserModule {}

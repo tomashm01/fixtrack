@@ -14,7 +14,11 @@ export class UserRole extends ValueObject<Props> {
     name = name.toUpperCase();
 
     if (!Object.values(Role).includes(name as Role)) {
-        throw new Error(`ROL INVÁLIDO ${name}. ROLES PERMITIDOS: ${Object.values(Role).join(', ')}`);
+      throw new Error(
+        `ROL INVÁLIDO ${name}. ROLES PERMITIDOS: ${Object.values(Role).join(
+          ', '
+        )}`
+      );
     }
 
     return new UserRole({ value: name as Role });

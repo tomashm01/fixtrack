@@ -10,7 +10,6 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { EventStoreModule } from '@aulasoftwarelibre/nestjs-eventstore';
 import { DeviceModule } from './device';
 
-
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -18,14 +17,14 @@ import { DeviceModule } from './device';
         `.env.${process.env.NODE_ENV}.local`,
         `.env.${process.env.NODE_ENV}`,
         '.env.local',
-        '.env',
+        '.env'
       ],
       isGlobal: true,
-      load: [configuration],
+      load: [configuration]
     }),
     MongooseModule.forRoot(process.env.MONGO_URI || '', {}),
-    MongooseModule.forRoot(process.env.KEYSTORE_URI,{
-      connectionName: process.env.KEYSTORE,
+    MongooseModule.forRoot(process.env.KEYSTORE_URI, {
+      connectionName: process.env.KEYSTORE
     }),
     EventStoreModule.forRoot({
       connection: process.env.EVENTSTORE_URI
@@ -35,7 +34,6 @@ import { DeviceModule } from './device';
     UserModule,
     RedisModule,
     DeviceModule
-  ],
+  ]
 })
-
-export class BootstrapModule { }
+export class BootstrapModule {}

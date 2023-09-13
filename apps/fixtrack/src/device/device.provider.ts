@@ -1,10 +1,9 @@
-import { DEVICE_FINDER } from "./application/service/device-finder.service";
-import { DeviceMongoFinderService } from "./infraestructure/service";
-
+import { DEVICE_FINDER } from './application/service/device-finder.service';
+import { DeviceMongoFinderService } from './infraestructure/service';
 
 export const DeviceProviders = [
   {
-    provide:DEVICE_FINDER,
-    useClass:DeviceMongoFinderService
+    provide: DEVICE_FINDER,
+    useClass: DeviceMongoFinderService
   }
 ];

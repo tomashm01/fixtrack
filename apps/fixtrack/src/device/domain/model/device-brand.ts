@@ -1,5 +1,5 @@
 import { ValueObject } from '@fixtrack/domain';
-import {Brand} from '@fixtrack/contracts';
+import { Brand } from '@fixtrack/contracts';
 
 interface Props {
   value: Brand;
@@ -14,7 +14,11 @@ export class DeviceBrand extends ValueObject<Props> {
     name = name.toUpperCase();
 
     if (!Object.values(Brand).includes(name as Brand)) {
-        throw new Error(`MARCA INVÁLIDA: ${name}. MARCAS VALIDAS: ${Object.values(Brand).join(', ')}`);
+      throw new Error(
+        `MARCA INVÁLIDA: ${name}. MARCAS VALIDAS: ${Object.values(Brand).join(
+          ', '
+        )}`
+      );
     }
 
     return new DeviceBrand({ value: name as Brand });

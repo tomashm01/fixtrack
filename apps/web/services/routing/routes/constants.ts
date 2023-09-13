@@ -5,5 +5,5 @@ export const ROUTES = {
   WORDK_ORDER: '/order',
   DEVICE: '/device',
   LOGOUT: '/login',
-  LOGIN: '/login',
-}
+  LOGIN: '/login'
+};

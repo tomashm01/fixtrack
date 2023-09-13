@@ -7,6 +7,6 @@ describe('Role', () => {
   });
 
   it('should throw an error for invalid role', () => {
-    expect(() => UserRole.with('INVALID_ROLE')).toThrowError('Invalid role');
+    expect(() => UserRole.with('INVALID_ROLE')).toThrowError('ROL INVÁLIDO');
   });
 });

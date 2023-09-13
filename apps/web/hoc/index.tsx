@@ -1,10 +1,16 @@
-import cookie from "cookie";
-import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from "next";
-import { getRole } from "apps/web/services/auth";
+import cookie from 'cookie';
+import {
+  GetServerSideProps,
+  GetServerSidePropsContext,
+  GetServerSidePropsResult
+} from 'next';
+import { getRole } from 'apps/web/services/auth';
 
 export const withAuth = (getServerSidePropsFunc?: GetServerSideProps) => {
-  return async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<any>> => {
-    const parsedCookies = cookie.parse(context.req.headers.cookie || "");
+  return async (
+    context: GetServerSidePropsContext
+  ): Promise<GetServerSidePropsResult<any>> => {
+    const parsedCookies = cookie.parse(context.req.headers.cookie || '');
     const token = parsedCookies.token;
     const role = await getRole(token);
 
@@ -12,8 +18,8 @@ export const withAuth = (getServerSidePropsFunc?: GetServerSideProps) => {
       return {
         redirect: {
           destination: '/login',
-          permanent: false,
-        },
+          permanent: false
+        }
       };
     }
 
@@ -27,15 +33,15 @@ export const withAuth = (getServerSidePropsFunc?: GetServerSideProps) => {
         ...originalProps,
         props: {
           ...originalProps.props,
-          role,
-        },
+          role
+        }
       };
     } else {
       return {
         ...originalProps,
         props: {
-          role,
-        },
+          role
+        }
       };
     }
   };

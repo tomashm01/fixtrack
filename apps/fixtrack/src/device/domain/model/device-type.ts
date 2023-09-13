@@ -1,5 +1,5 @@
 import { ValueObject } from '@fixtrack/domain';
-import {Type} from '@fixtrack/contracts';
+import { Type } from '@fixtrack/contracts';
 
 interface Props {
   value: Type;
@@ -14,7 +14,11 @@ export class DeviceType extends ValueObject<Props> {
     name = name.toUpperCase();
 
     if (!Object.values(Type).includes(name as Type)) {
-        throw new Error(`TIPO INVÁLIDO: ${name}. TIPOS VÁLIDOS: ${Object.values(Type).join(', ')}`);
+      throw new Error(
+        `TIPO INVÁLIDO: ${name}. TIPOS VÁLIDOS: ${Object.values(Type).join(
+          ', '
+        )}`
+      );
     }
 
     return new DeviceType({ value: name as Type });

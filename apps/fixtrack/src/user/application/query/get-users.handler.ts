@@ -8,8 +8,10 @@ import { USER_FINDER, UserFinder } from '../service/user-finder.service';
 
 @QueryHandler(GetUsersQuery)
 export class GetUsersHandler implements IQueryHandler<GetUsersQuery> {
-  constructor(@Inject(USER_FINDER)
-  private readonly userFinder: UserFinder) {}
+  constructor(
+    @Inject(USER_FINDER)
+    private readonly userFinder: UserFinder
+  ) {}
 
   async execute(): Promise<Nullable<UserDTO[]>> {
     return this.userFinder.findAll();

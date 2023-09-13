@@ -1,4 +1,3 @@
-
-export class DeleteUserDTO{
+export class DeleteUserDTO {
   readonly _id: string;
 }

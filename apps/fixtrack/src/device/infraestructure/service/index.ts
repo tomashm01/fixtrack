@@ -1,1 +1,1 @@
-export * from './deviceMongoFinder.service'
+export * from './deviceMongoFinder.service';

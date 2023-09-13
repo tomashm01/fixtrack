@@ -10,10 +10,9 @@ export const DeviceSchema = new Schema(
     _id: String,
     model: { type: String, index: { unique: true } },
     type: String,
-    brand: String,
+    brand: String
   },
   {
-    versionKey: false,
-  },
+    versionKey: false
+  }
 );
-

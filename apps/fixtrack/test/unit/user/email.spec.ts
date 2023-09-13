@@ -6,6 +6,8 @@ describe('Email', () => {
   });
 
   it('should throw an error for invalid email', () => {
-    expect(() => UserEmail.with('invalid-email')).toThrowError('Email must be a valid email address');
+    expect(() => UserEmail.with('invalid-email')).toThrowError(
+      'Email must be a valid email address'
+    );
   });
 });

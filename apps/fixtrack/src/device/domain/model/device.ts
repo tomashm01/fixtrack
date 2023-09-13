@@ -1,6 +1,5 @@
 import { EncryptedAggregateRoot } from '@aulasoftwarelibre/nestjs-eventstore';
 
-
 import { DeviceId } from './device-id';
 import { DeviceModel } from './device-model';
 import { DeviceType } from './device-type';
@@ -8,14 +7,12 @@ import { DeviceBrand } from './device-brand';
 import { DeviceWasCreated } from '../event/device-was-created.event';
 import { DeviceWasDeleted } from '../event';
 
-
 export class Device extends EncryptedAggregateRoot {
   private _id: DeviceId;
   private _model: DeviceModel;
   private _type: DeviceType;
   private _brand: DeviceBrand;
-  private _deleted: boolean=false;
-
+  private _deleted: boolean = false;
 
   public static add(
     id: DeviceId,
@@ -69,5 +66,4 @@ export class Device extends EncryptedAggregateRoot {
   private onDeviceWasDeleted(event: DeviceWasDeleted): void {
     this._deleted = true;
   }
-
 }

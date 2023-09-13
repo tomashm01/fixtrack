@@ -1,6 +1,5 @@
-import { DeviceId } from "../model";
-import { DeviceError } from "./device.error";
-
+import { DeviceId } from '../model';
+import { DeviceError } from './device.error';
 
 export class DeviceNotFoundError extends DeviceError {
   public static withId(id: DeviceId): DeviceNotFoundError {

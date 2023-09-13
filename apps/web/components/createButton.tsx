@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react';
 import {
   Button,
   Modal,
@@ -11,45 +11,49 @@ import {
   Input,
   FormControl,
   FormLabel,
-  Text,
-} from "@chakra-ui/react";
+  Text
+} from '@chakra-ui/react';
 import { v4 as uuidv4 } from 'uuid';
 
 export interface CreateButtonProps {
-  fields: Array<{ label: string; type: string; fieldName:string; }>;
+  fields: Array<{ label: string; type: string; fieldName: string }>;
   apiUrl: string;
-  title:string;
-  onCreated?: (newItem:any) => void;
+  title: string;
+  onCreated?: (newItem: any) => void;
 }
 
-const CreateButton: React.FC<CreateButtonProps> = ({ fields, apiUrl, title, onCreated }) => {
-
+const CreateButton: React.FC<CreateButtonProps> = ({
+  fields,
+  apiUrl,
+  title,
+  onCreated
+}) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState<any>({});
-  
+
   const handleSubmit = async () => {
-    const data = {...formData, _id: uuidv4()};
+    const data = { ...formData, _id: uuidv4() };
     try {
       const response = await fetch(apiUrl, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(data)
       });
       if (response.ok) {
-        console.log("Creado con éxito");
-        if(onCreated) onCreated(data);
+        console.log('Creado con éxito');
+        if (onCreated) onCreated(data);
         setIsOpen(false);
       } else {
         const errorData = await response.json();
-        console.log(errorData)
-        setErrorMessage(errorData.message || "Ocurrió un error");
+        console.log(errorData);
+        setErrorMessage(errorData.message || 'Ocurrió un error');
       }
     } catch (error) {
-      console.log("Ocurrió un error:", error);
-      setErrorMessage("Ocurrió un error al enviar el formulario");
+      console.log('Ocurrió un error:', error);
+      setErrorMessage('Ocurrió un error al enviar el formulario');
     }
   };
 
@@ -62,11 +66,17 @@ const CreateButton: React.FC<CreateButtonProps> = ({ fields, apiUrl, title, onCr
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader display='flex' justifyContent='center'>Crear nuevo {title}</ModalHeader>
+          <ModalHeader display="flex" justifyContent="center">
+            Crear nuevo {title}
+          </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             {errorMessage && (
-              <ModalHeader color="red.500" display='flex' justifyContent='center'>
+              <ModalHeader
+                color="red.500"
+                display="flex"
+                justifyContent="center"
+              >
                 <Text>{errorMessage}</Text>
               </ModalHeader>
             )}
@@ -75,8 +85,11 @@ const CreateButton: React.FC<CreateButtonProps> = ({ fields, apiUrl, title, onCr
                 <FormLabel>{field.label}</FormLabel>
                 <Input
                   type={field.type}
-                  onChange={(e) =>
-                    setFormData({ ...formData, [field.fieldName]: e.target.value })
+                  onChange={e =>
+                    setFormData({
+                      ...formData,
+                      [field.fieldName]: e.target.value
+                    })
                   }
                 />
               </FormControl>

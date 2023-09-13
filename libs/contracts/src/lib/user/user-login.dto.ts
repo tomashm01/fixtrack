@@ -1,4 +1,3 @@
-
 import { ApiProperty } from '@nestjs/swagger';
 import { CredentialsInterface } from '../auth/credentials.interface';
 

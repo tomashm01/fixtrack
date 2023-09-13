@@ -7,12 +7,9 @@ import { PassportModule } from '@nestjs/passport';
 import { AuthService } from './service/auth.service';
 import { JwtStrategy } from './jwt.strategy';
 
-
 @Module({
   controllers: [],
-  exports: [
-    AuthService
-  ],
+  exports: [AuthService],
   imports: [
     CqrsModule,
     JwtModule.registerAsync({
@@ -20,14 +17,11 @@ import { JwtStrategy } from './jwt.strategy';
       inject: [ConfigService],
       useFactory: () => ({
         secret: 'secret',
-        signOptions: { expiresIn: '1d' },
-      }),
+        signOptions: { expiresIn: '1d' }
+      })
     }),
-    PassportModule,
+    PassportModule
   ],
-  providers: [
-    AuthService, 
-    JwtStrategy,
-  ],
+  providers: [AuthService, JwtStrategy]
 })
 export class AuthModule {}

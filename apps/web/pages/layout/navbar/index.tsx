@@ -8,7 +8,7 @@ interface NavbarProps {
   role: string;
 }
 
-const Navbar = ({role}: NavbarProps) => {
+const Navbar = ({ role }: NavbarProps) => {
   const { menuItems } = useNavbar(role);
   const router = useRouter();
 
@@ -20,17 +20,24 @@ const Navbar = ({role}: NavbarProps) => {
   };
 
   return (
-    <Flex gap={2} paddingTop={5} justifyContent="center"> 
-        {menuItems.filter(item => item.roles.includes(role)).map(({ icon: IconComponent, id, isActive, route }) => (
+    <Flex gap={2} paddingTop={5} justifyContent="center">
+      {menuItems
+        .filter(item => item.roles.includes(role))
+        .map(({ icon: IconComponent, id, isActive, route }) => (
           <Tooltip label={id} key={id} hasArrow>
-            <Box mx={2} fontSize="2xl" cursor="pointer" onClick={() => handleClick(route)} _hover={{ color: 'blue.500' }}>
+            <Box
+              mx={2}
+              fontSize="2xl"
+              cursor="pointer"
+              onClick={() => handleClick(route)}
+              _hover={{ color: 'blue.500' }}
+            >
               <Icon as={IconComponent} w={8} h={8} />
             </Box>
           </Tooltip>
         ))}
     </Flex>
   );
-  
 };
 
 export default Navbar;

@@ -10,10 +10,9 @@ export const UserSchema = new Schema(
     _id: String,
     email: { type: String, index: { unique: true } },
     password: String,
-    role: String,
+    role: String
   },
   {
-    versionKey: false,
-  },
+    versionKey: false
+  }
 );
-

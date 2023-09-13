@@ -1,21 +1,20 @@
-import { withAuth } from "../../hoc/index";
-import Navbar from "../layout/navbar";
+import { withAuth } from '../../hoc/index';
+import Navbar from '../layout/navbar';
 
 import AdminDevice from './components/adminDevice';
-import CustomerDevice from "./components/customerDevice";
-import {DeviceContext, useDevices } from './hooks';
+import CustomerDevice from './components/customerDevice';
+import { DeviceContext, useDevices } from './hooks';
 
-const deviceMapper : Record<string,JSX.Element>={
-  "ADMIN":<AdminDevice />,
-  "CLIENTE":<CustomerDevice/>,
-}
+const deviceMapper: Record<string, JSX.Element> = {
+  ADMIN: <AdminDevice />,
+  CLIENTE: <CustomerDevice />
+};
 
 interface DeviceProps {
   role: string;
 }
 
-const Device = ({role}:DeviceProps ) => {
-
+const Device = ({ role }: DeviceProps) => {
   const { devices, setDevices, loading, error } = useDevices();
 
   return (

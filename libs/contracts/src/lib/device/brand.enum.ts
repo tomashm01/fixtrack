@@ -1,4 +1,4 @@
-export enum Brand{
+export enum Brand {
   APPLE = 'APPLE',
   SAMSUNG = 'SAMSUNG',
   XIAOMI = 'XIAOMI',
@@ -8,5 +8,5 @@ export enum Brand{
   HUAWEI = 'HUAWEI',
   LOGITECH = 'LOGITECH',
   HYPERX = 'HYPERX',
-  OTHER = 'OTHER',
+  OTHER = 'OTHER'
 }

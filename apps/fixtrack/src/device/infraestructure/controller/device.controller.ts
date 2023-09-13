@@ -1,12 +1,30 @@
-import { Body, ConflictException, Controller, Delete, Get, NotFoundException, Param, Post } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiOkResponse } from '@nestjs/swagger';
+import {
+  Body,
+  ConflictException,
+  Controller,
+  Delete,
+  Get,
+  NotFoundException,
+  Param,
+  Post
+} from '@nestjs/common';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBody,
+  ApiOkResponse
+} from '@nestjs/swagger';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-
 
 import { DeviceDTO, DeviceDeleteResponse } from '@fixtrack/contracts';
 import { catchError } from '../../../utils';
 import { GetDevicesQuery } from '../../application/query/get-devices.query';
-import { DeviceAlreadyExistsError, DeviceId, DeviceNotFoundError } from '../../domain';
+import {
+  DeviceAlreadyExistsError,
+  DeviceId,
+  DeviceNotFoundError
+} from '../../domain';
 import { CreateDeviceCommand } from '../../application/command/create-device.command';
 import { DeleteDeviceCommand } from '../../application/command/delete-device.command';
 import { GetDeviceByIdQuery } from '../../application/query/get-device-by-id.query';
@@ -14,10 +32,9 @@ import { GetDeviceByIdQuery } from '../../application/query/get-device-by-id.que
 @ApiTags('DeviceController')
 @Controller('device')
 export class DeviceController {
-
   constructor(
     private readonly queryBus: QueryBus,
-    private readonly commandBus:CommandBus
+    private readonly commandBus: CommandBus
   ) {}
 
   @Get()
@@ -31,11 +48,16 @@ export class DeviceController {
   @ApiOperation({ summary: 'Crear un dispositivo' })
   @ApiBody({ type: DeviceDTO })
   @ApiOkResponse({ type: DeviceDTO })
-  async create(
-    @Body() deviceDTO: DeviceDTO
-  ): Promise<DeviceDTO> {
+  async create(@Body() deviceDTO: DeviceDTO): Promise<DeviceDTO> {
     try {
-      return await this.commandBus.execute(new CreateDeviceCommand(deviceDTO._id,deviceDTO.model,deviceDTO.type,deviceDTO.brand));
+      return await this.commandBus.execute(
+        new CreateDeviceCommand(
+          deviceDTO._id,
+          deviceDTO.model,
+          deviceDTO.type,
+          deviceDTO.brand
+        )
+      );
     } catch (e) {
       if (e instanceof DeviceAlreadyExistsError) {
         throw new ConflictException(e.message);
@@ -45,7 +67,6 @@ export class DeviceController {
     }
   }
 
-  
   @Delete(':id')
   @ApiOperation({ summary: 'Eliminar un dispositivo por id' })
   @ApiOkResponse({ type: DeviceId })
@@ -54,8 +75,8 @@ export class DeviceController {
       await this.commandBus.execute(new DeleteDeviceCommand(id));
       return {
         id: id,
-        message: 'Device deleted',
-      }
+        message: 'Device deleted'
+      };
     } catch (e) {
       if (e instanceof DeviceNotFoundError) {
         throw new NotFoundException(e.message);
@@ -79,9 +100,4 @@ export class DeviceController {
       }
     }
   }
-
-  
-
-
-
 }

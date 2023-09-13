@@ -6,27 +6,25 @@ import Landing from './landing';
 import { getRole } from '../services/auth';
 
 const Index = () => {
-  return (
-    <Landing />
-  );
+  return <Landing />;
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const parsedCookies = cookie.parse(context.req.headers.cookie || "");
+export const getServerSideProps: GetServerSideProps = async context => {
+  const parsedCookies = cookie.parse(context.req.headers.cookie || '');
   const token = parsedCookies.token;
 
-  if(!token){
+  if (!token) {
     return { props: {} };
   }
 
-  const role=await getRole(token);
+  const role = await getRole(token);
 
-  if(!role){
+  if (!role) {
     return {
       redirect: {
         destination: '/login',
-        permanent: false,
-      },
+        permanent: false
+      }
     };
   }
 
@@ -34,8 +32,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return {
       redirect: {
         destination: '/dashboard',
-        permanent: false,
-      },
+        permanent: false
+      }
     };
   }
 

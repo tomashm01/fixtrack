@@ -9,7 +9,7 @@ export class RedisService {
   constructor() {
     this.redis = new Redis({
       host: 'redis',
-      port: 6379,
+      port: 6379
     });
   }
 
@@ -32,11 +32,10 @@ export class RedisService {
   async del(key: string): Promise<number> {
     return await this.redis.del(key);
   }
-
 }
 
 @Module({
   exports: [RedisService],
-  providers: [RedisService],
+  providers: [RedisService]
 })
 export class RedisModule {}

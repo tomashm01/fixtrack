@@ -5,40 +5,43 @@ import { ROUTES } from '../../../services/routing/routes/constants';
 
 const useNavbar = (role: string) => {
   const { pathname } = useRouter();
-  
+
   const isActive = (route: string) => pathname === route;
-  
-  const menuItems = useMemo(() => [
-    {
-      icon: FaHome,
-      id: 'Página principal',
-      isActive: isActive(ROUTES.HOME),
-      route: ROUTES.HOME,
-      roles: ['ADMIN', 'CLIENTE', 'TECNICO'],
-    },
-    {
-      icon: FaUserAlt,
-      id: 'Usuarios',
-      isActive: isActive(ROUTES.USER),
-      route: ROUTES.USER,
-      roles: ['ADMIN'],
-    },
-    ,
-    {
-      icon: FaMobileAlt,
-      id: 'Dispositivos',
-      isActive: isActive(ROUTES.DEVICE),
-      route: ROUTES.DEVICE,
-      roles: ['ADMIN','CLIENTE'],
-    },
-    {
-      icon: FaSignOutAlt,
-      id: 'Cerrar sesión',
-      isActive: isActive(ROUTES.LOGOUT),
-      route: ROUTES.LOGOUT,
-      roles: ['ADMIN', 'CLIENTE', 'TECNICO'],
-    }
-  ], [isActive, role]);
+
+  const menuItems = useMemo(
+    () => [
+      {
+        icon: FaHome,
+        id: 'Página principal',
+        isActive: isActive(ROUTES.HOME),
+        route: ROUTES.HOME,
+        roles: ['ADMIN', 'CLIENTE', 'TECNICO']
+      },
+      {
+        icon: FaUserAlt,
+        id: 'Usuarios',
+        isActive: isActive(ROUTES.USER),
+        route: ROUTES.USER,
+        roles: ['ADMIN']
+      },
+      ,
+      {
+        icon: FaMobileAlt,
+        id: 'Dispositivos',
+        isActive: isActive(ROUTES.DEVICE),
+        route: ROUTES.DEVICE,
+        roles: ['ADMIN', 'CLIENTE']
+      },
+      {
+        icon: FaSignOutAlt,
+        id: 'Cerrar sesión',
+        isActive: isActive(ROUTES.LOGOUT),
+        route: ROUTES.LOGOUT,
+        roles: ['ADMIN', 'CLIENTE', 'TECNICO']
+      }
+    ],
+    [isActive, role]
+  );
 
   return { menuItems };
 };

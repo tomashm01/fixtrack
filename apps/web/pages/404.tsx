@@ -7,5 +7,4 @@ export default function Custom404() {
   useEffect(() => {
     router.push('/login');
   }, []);
-
 }
