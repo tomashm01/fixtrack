@@ -1,11 +1,10 @@
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { Inject } from "@nestjs/common";
 import { AggregateRepository, InjectAggregateRepository } from "@aulasoftwarelibre/nestjs-eventstore";
+
 import { CreateDeviceCommand } from "./create-device.command";
 import { Device, DeviceAlreadyExistsError, DeviceBrand, DeviceId, DeviceModel, DeviceType } from "../../domain";
 import { DEVICE_FINDER, DeviceFinder } from "../service/device-finder.service";
-import { DeviceDTO } from "@fixtrack/contracts";
-
 
 
 @CommandHandler(CreateDeviceCommand)

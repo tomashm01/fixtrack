@@ -1,11 +1,10 @@
-import { Body, ConflictException, Controller, Delete, Get, NotFoundException, Param, Post, UnauthorizedException } from '@nestjs/common';
+import { Body, ConflictException, Controller, Delete, Get, NotFoundException, Param, Post } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiOkResponse } from '@nestjs/swagger';
-
-
-import { CreateUserDTO, DeviceDTO, DeviceDeleteResponse, LoginDTO, RoleResponse, TokenResponse, UserDTO, UserDeleteResponse } from '@fixtrack/contracts';
-import { IdAlreadyRegisteredError, IdNotFoundError } from '@aulasoftwarelibre/nestjs-eventstore';
-import { catchError } from '../../../utils';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
+
+
+import { DeviceDTO, DeviceDeleteResponse } from '@fixtrack/contracts';
+import { catchError } from '../../../utils';
 import { GetDevicesQuery } from '../../application/query/get-devices.query';
 import { DeviceAlreadyExistsError, DeviceId, DeviceNotFoundError } from '../../domain';
 import { CreateDeviceCommand } from '../../application/command/create-device.command';

@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useRouter } from 'next/router';
-import { FaHome, FaSignOutAlt, FaUserAlt } from 'react-icons/fa';
+import { FaHome, FaMobileAlt, FaSignOutAlt, FaUserAlt } from 'react-icons/fa';
 import { ROUTES } from '../../../services/routing/routes/constants';
 
 const useNavbar = (role: string) => {
@@ -23,13 +23,21 @@ const useNavbar = (role: string) => {
       route: ROUTES.USER,
       roles: ['ADMIN'],
     },
+    ,
+    {
+      icon: FaMobileAlt,
+      id: 'Dispositivos',
+      isActive: isActive(ROUTES.DEVICE),
+      route: ROUTES.DEVICE,
+      roles: ['ADMIN','CLIENTE'],
+    },
     {
       icon: FaSignOutAlt,
       id: 'Cerrar sesión',
       isActive: isActive(ROUTES.LOGOUT),
       route: ROUTES.LOGOUT,
       roles: ['ADMIN', 'CLIENTE', 'TECNICO'],
-    },
+    }
   ], [isActive, role]);
 
   return { menuItems };

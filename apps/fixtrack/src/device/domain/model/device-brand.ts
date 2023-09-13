@@ -8,13 +8,13 @@ interface Props {
 export class DeviceBrand extends ValueObject<Props> {
   public static with(name: string): DeviceBrand {
     if (name.length === 0) {
-      throw new Error('Brand cannot be empty');
+      throw new Error('MARCA NO PUEDE ESTAR VACÍA');
     }
 
     name = name.toUpperCase();
 
     if (!Object.values(Brand).includes(name as Brand)) {
-        throw new Error(`Invalid brand: ${name}. Allowed brands are: ${Object.values(Brand).join(', ')}`);
+        throw new Error(`MARCA INVÁLIDA: ${name}. MARCAS VALIDAS: ${Object.values(Brand).join(', ')}`);
     }
 
     return new DeviceBrand({ value: name as Brand });

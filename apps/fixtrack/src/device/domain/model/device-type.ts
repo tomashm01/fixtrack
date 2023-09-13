@@ -8,13 +8,13 @@ interface Props {
 export class DeviceType extends ValueObject<Props> {
   public static with(name: string): DeviceType {
     if (name.length === 0) {
-      throw new Error('Type cannot be empty');
+      throw new Error('TIPO NO PUEDE ESTAR VACÍO');
     }
 
     name = name.toUpperCase();
 
     if (!Object.values(Type).includes(name as Type)) {
-        throw new Error(`Invalid type: ${name}. Allowed types are: ${Object.values(Type).join(', ')}`);
+        throw new Error(`TIPO INVÁLIDO: ${name}. TIPOS VÁLIDOS: ${Object.values(Type).join(', ')}`);
     }
 
     return new DeviceType({ value: name as Type });

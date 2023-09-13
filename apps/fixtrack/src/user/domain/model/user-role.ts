@@ -8,13 +8,13 @@ interface Props {
 export class UserRole extends ValueObject<Props> {
   public static with(name: string): UserRole {
     if (name.length === 0) {
-      throw new Error('Role cannot be empty');
+      throw new Error('ROL NO PUEDE ESTAR VACÍO');
     }
 
     name = name.toUpperCase();
 
     if (!Object.values(Role).includes(name as Role)) {
-        throw new Error(`Invalid role: ${name}. Allowed roles are: ${Object.values(Role).join(', ')}`);
+        throw new Error(`ROL INVÁLIDO ${name}. ROLES PERMITIDOS: ${Object.values(Role).join(', ')}`);
     }
 
     return new UserRole({ value: name as Role });

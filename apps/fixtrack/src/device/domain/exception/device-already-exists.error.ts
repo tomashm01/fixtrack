@@ -1,4 +1,4 @@
-import { DeviceBrand, DeviceId, DeviceModel, DeviceType } from "../model";
+import { DeviceId, DeviceModel } from "../model";
 import { DeviceError } from "./device.error";
 
 

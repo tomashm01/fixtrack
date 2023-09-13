@@ -4,6 +4,6 @@ import { UserError } from "./user.error";
 
 export class UserNotFoundError extends UserError {
   public static withId(id: UserId): UserNotFoundError {
-    return new UserNotFoundError(`User with id ${id.value} not found`);
+    return new UserNotFoundError(`USUARIO CON ID ${id.value} NO ENCONTRADO`);
   }
 }

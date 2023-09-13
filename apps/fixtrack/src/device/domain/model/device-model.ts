@@ -7,7 +7,7 @@ interface Props {
 export class DeviceModel extends ValueObject<Props> {
   public static with(name: string): DeviceModel {
     if (name.length===0) {
-      throw new Error('Model name cannot be empty');
+      throw new Error('MODELO NO PUEDE ESTAR VACÍO');
     }
 
     return new DeviceModel({ value: name });
