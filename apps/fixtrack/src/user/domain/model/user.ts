@@ -33,9 +33,7 @@ export class User extends EncryptedAggregateRoot {
 
   updatePassword(newPassword: UserPassword): void {
     if (!this._deleted && newPassword.value !== this._password.value) {
-      this.apply(
-        new PasswordWasChanged(this._userId.value, newPassword.value)
-      );
+      this.apply(new PasswordWasChanged(this._userId.value, newPassword.value));
     }
   }
 
@@ -77,5 +75,4 @@ export class User extends EncryptedAggregateRoot {
   private onPasswordWasChanged(event: PasswordWasChanged) {
     this._password = UserPassword.with(event.password);
   }
-
 }

@@ -24,7 +24,13 @@ const useNavbar = (role: string) => {
         route: ROUTES.USER,
         roles: ['ADMIN']
       },
-      ,
+      {
+        icon: FaUserAlt,
+        id: 'Perfil',
+        isActive: isActive(ROUTES.PROFILE),
+        route: ROUTES.PROFILE,
+        roles: ['CLIENTE', 'TECNICO']
+      },
       {
         icon: FaMobileAlt,
         id: 'Dispositivos',

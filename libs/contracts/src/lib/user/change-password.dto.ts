@@ -1,4 +1,4 @@
-export interface ChangePasswordDTO{
+export interface ChangePasswordDTO {
   _id: string;
   password: string;
 }

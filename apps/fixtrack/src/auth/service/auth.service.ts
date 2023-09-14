@@ -29,7 +29,10 @@ export class AuthService {
     }
   }
 
-  async generateTempToken(userId: string, expiresIn: string = '24h'): Promise<string> {
+  async generateTempToken(
+    userId: string,
+    expiresIn: string = '24h'
+  ): Promise<string> {
     return this.jwtService.sign({ userId }, { expiresIn });
   }
 

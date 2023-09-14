@@ -7,7 +7,9 @@ import { RedisService } from 'apps/fixtrack/src/redis.service';
 import { PasswordWasChanged } from '../../domain';
 
 @EventsHandler(PasswordWasChanged)
-export class PasswordWasChangedProjection implements IEventHandler<PasswordWasChanged> {
+export class PasswordWasChangedProjection
+  implements IEventHandler<PasswordWasChanged>
+{
   constructor(
     @InjectModel(USER_PROJECTION)
     private readonly userProjection: Model<UserDocument>,
@@ -18,7 +20,7 @@ export class PasswordWasChangedProjection implements IEventHandler<PasswordWasCh
     const user = await this.userProjection.findOne({ _id: event.id });
     console.log(user);
     if (!user) return;
-    
+
     user.password = event.password;
 
     await user.save();

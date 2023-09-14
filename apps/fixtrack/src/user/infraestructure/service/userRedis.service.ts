@@ -26,5 +26,4 @@ export class UserRedisService {
       await this.redisService.set('user:' + id.value, JSON.stringify(user));
     }
   }
-
 }

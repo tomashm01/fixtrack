@@ -34,8 +34,8 @@ services:
   mailcatcher:
     image: schickling/mailcatcher
     ports:
-      - "1080:1080" # Interfaz web
-      - "1025:1025" # Puerto SMTP
+      - '1080:1080' # Interfaz web
+      - '1025:1025' # Puerto SMTP
     networks:
       - network
 

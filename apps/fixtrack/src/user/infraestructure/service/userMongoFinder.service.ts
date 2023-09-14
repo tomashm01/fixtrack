@@ -32,5 +32,4 @@ export class UserMongoFinder {
   async updateUserPassword(id: UserId, password: string): Promise<void> {
     await this.users.updateOne({ _id: id.value }, { password }).exec();
   }
-
 }

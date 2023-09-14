@@ -87,10 +87,12 @@ export class UserController {
         
         `
       );
-      const user: UserDTO = await this.userService.createUser({ ...createUserDto, password });
+      const user: UserDTO = await this.userService.createUser({
+        ...createUserDto,
+        password
+      });
 
       const tempToken = await this.authService.generateTempToken(user.id);
-
 
       return user;
     } catch (e) {
@@ -161,22 +163,27 @@ export class UserController {
   @Post('change-password')
   @ApiOperation({ summary: 'Cambiar la contraseña del usuario' })
   @ApiOkResponse({ type: ChangePasswordRequestDTO })
-  async changePassword(@Body() changePasswordDto: ChangePasswordRequestDTO): Promise<ChangePasswordResponse> {
+  async changePassword(
+    @Body() changePasswordDto: ChangePasswordRequestDTO
+  ): Promise<ChangePasswordResponse> {
     const { token, password, newpassword } = changePasswordDto;
-    try{
-      
+    try {
       const userId: UserId = await this.authService.validateToken(token);
       const user: UserDTO = await this.userService.getUserById(userId.value);
-      const isValidPassword = await this.authService.validatePassword(password, user.password);
+      const isValidPassword = await this.authService.validatePassword(
+        password,
+        user.password
+      );
 
       if (!isValidPassword) {
         throw new ForbiddenException('Contraseña incorrecta');
       }
 
-      const newHashedPassword = await this.authService.hashPassword(newpassword);
-      await this.userService.updateUserPassword(userId,newHashedPassword);
-
-    } catch(e){
+      const newHashedPassword = await this.authService.hashPassword(
+        newpassword
+      );
+      await this.userService.updateUserPassword(userId, newHashedPassword);
+    } catch (e) {
       if (e instanceof ForbiddenException) {
         throw e;
       } else {
@@ -188,5 +195,4 @@ export class UserController {
       message: 'Contraseña cambiada correctamente'
     };
   }
-
 }

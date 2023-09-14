@@ -52,5 +52,4 @@ export class UserService {
       new PasswordChangeCommand(id.value, password)
     );
   }
-
 }
