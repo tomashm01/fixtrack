@@ -12,6 +12,8 @@ services:
       - mongo
       - redis
       - rabbitmq
+      - eventstore
+      - mailcatcher
     volumes:
       - .:/app
       - /app/node_modules
@@ -26,6 +28,14 @@ services:
       - type: volume
         source: mongo-volume-data
         target: /data/db
+    networks:
+      - network
+
+  mailcatcher:
+    image: schickling/mailcatcher
+    ports:
+      - "1080:1080" # Interfaz web
+      - "1025:1025" # Puerto SMTP
     networks:
       - network
 

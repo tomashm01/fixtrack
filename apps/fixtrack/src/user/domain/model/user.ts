@@ -1,6 +1,6 @@
 import { EncryptedAggregateRoot } from '@aulasoftwarelibre/nestjs-eventstore';
 
-import { UserWasCreated, UserWasDeleted } from '../event';
+import { PasswordWasChanged, UserWasCreated, UserWasDeleted } from '../event';
 import { UserId } from './user-id';
 import { UserEmail } from './user-email';
 import { UserPassword } from './user-password';
@@ -29,6 +29,14 @@ export class User extends EncryptedAggregateRoot {
 
   delete(): void {
     if (!this._deleted) this.apply(new UserWasDeleted(this._userId.value));
+  }
+
+  updatePassword(newPassword: UserPassword): void {
+    if (!this._deleted && newPassword.value !== this._password.value) {
+      this.apply(
+        new PasswordWasChanged(this._userId.value, newPassword.value)
+      );
+    }
   }
 
   public aggregateId(): string {
@@ -65,4 +73,9 @@ export class User extends EncryptedAggregateRoot {
   private onUserWasDeleted(event: UserWasDeleted) {
     this._deleted = true;
   }
+
+  private onPasswordWasChanged(event: PasswordWasChanged) {
+    this._password = UserPassword.with(event.password);
+  }
+
 }

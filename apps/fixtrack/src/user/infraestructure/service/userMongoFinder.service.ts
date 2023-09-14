@@ -28,4 +28,9 @@ export class UserMongoFinder {
     await this.users.deleteOne({ _id: id.value }).exec();
     return true;
   }
+
+  async updateUserPassword(id: UserId, password: string): Promise<void> {
+    await this.users.updateOne({ _id: id.value }, { password }).exec();
+  }
+
 }

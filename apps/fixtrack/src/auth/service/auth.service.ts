@@ -25,9 +25,12 @@ export class AuthService {
       const { userId } = this.jwtService.verify(token);
       return UserId.with(userId);
     } catch (e) {
-      this.logger.error(`Invalid token: ${e.message}`);
       throw new UnauthorizedException('Invalid token');
     }
+  }
+
+  async generateTempToken(userId: string, expiresIn: string = '24h'): Promise<string> {
+    return this.jwtService.sign({ userId }, { expiresIn });
   }
 
   async hashPassword(password: string): Promise<string> {

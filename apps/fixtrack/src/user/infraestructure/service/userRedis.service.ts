@@ -18,4 +18,13 @@ export class UserRedisService {
     await this.redisService.del('user:' + id.value);
     return true;
   }
+
+  async updateUserPassword(id: UserId, password: string): Promise<void> {
+    const user = await this.findById(id);
+    if (user) {
+      user.password = password;
+      await this.redisService.set('user:' + id.value, JSON.stringify(user));
+    }
+  }
+
 }

@@ -7,6 +7,7 @@ import { GetUserByIdQuery } from '../../application/query/get-user-by-id.query';
 import { GetUserByEmailQuery } from '../../application/query/get-user-by-email.query';
 import { DeleteUserCommand } from '../../application/command/delete-user.command';
 import { UserId } from '../../domain';
+import { PasswordChangeCommand } from '../../application/command/password-change.command';
 
 @Injectable()
 export class UserService {
@@ -45,4 +46,11 @@ export class UserService {
   async deleteUser(id: UserId): Promise<boolean> {
     return await this.commandBus.execute(new DeleteUserCommand(id.value));
   }
+
+  async updateUserPassword(id: UserId, password: string): Promise<void> {
+    return await this.commandBus.execute(
+      new PasswordChangeCommand(id.value, password)
+    );
+  }
+
 }

@@ -3,6 +3,7 @@ import {
   ConflictException,
   Controller,
   Delete,
+  ForbiddenException,
   Get,
   NotFoundException,
   Param,
@@ -19,6 +20,9 @@ import {
 
 import { UserService } from '../service/user.service';
 import {
+  ChangePasswordDTO,
+  ChangePasswordRequestDTO,
+  ChangePasswordResponse,
   CreateUserDTO,
   LoginDTO,
   RoleResponse,
@@ -33,19 +37,21 @@ import {
 import { catchError } from '../../../utils';
 import { AuthService } from 'apps/fixtrack/src/auth/service/auth.service';
 import { UserId, UserNotFoundError } from '../../domain';
+import { MailService } from 'apps/fixtrack/src/mail.service';
 
 @ApiTags('UserController')
 @Controller('user')
 export class UserController {
   constructor(
     private readonly userService: UserService,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
+    private readonly mailService: MailService
   ) {}
 
   @Get()
   @ApiOperation({ summary: 'Obtener todos los usuarios' })
   @ApiOkResponse({ type: UserDTO })
-  findAll(): Promise<UserDTO[] | null> {
+  async findAll(): Promise<UserDTO[] | null> {
     return this.userService.getUsers();
   }
 
@@ -73,7 +79,20 @@ export class UserController {
       const password: string = await this.authService.hashPassword(
         createUserDto.password
       );
-      return await this.userService.createUser({ ...createUserDto, password });
+      await this.mailService.sendEmail(
+        createUserDto.email,
+        'Bienvenido a FixTrack',
+        `<h1>Bienvenido a FixTrack</h1>
+        <p>Gracias por registrarte en FixTrack</p>
+        
+        `
+      );
+      const user: UserDTO = await this.userService.createUser({ ...createUserDto, password });
+
+      const tempToken = await this.authService.generateTempToken(user.id);
+
+
+      return user;
     } catch (e) {
       if (e instanceof IdAlreadyRegisteredError) {
         throw new ConflictException(e.message);
@@ -125,6 +144,8 @@ export class UserController {
   }
 
   @Post('validate-token')
+  @ApiOperation({ summary: 'Validar el token del usuario' })
+  @ApiBody({ type: TokenResponse })
   async validateToken(@Body() token: TokenResponse): Promise<RoleResponse> {
     const userId: UserId = await this.authService.validateToken(token.token);
 
@@ -136,4 +157,36 @@ export class UserController {
       (await this.userService.getUserById(userId.value)).role
     );
   }
+
+  @Post('change-password')
+  @ApiOperation({ summary: 'Cambiar la contraseña del usuario' })
+  @ApiOkResponse({ type: ChangePasswordRequestDTO })
+  async changePassword(@Body() changePasswordDto: ChangePasswordRequestDTO): Promise<ChangePasswordResponse> {
+    const { token, password, newpassword } = changePasswordDto;
+    try{
+      
+      const userId: UserId = await this.authService.validateToken(token);
+      const user: UserDTO = await this.userService.getUserById(userId.value);
+      const isValidPassword = await this.authService.validatePassword(password, user.password);
+
+      if (!isValidPassword) {
+        throw new ForbiddenException('Contraseña incorrecta');
+      }
+
+      const newHashedPassword = await this.authService.hashPassword(newpassword);
+      await this.userService.updateUserPassword(userId,newHashedPassword);
+
+    } catch(e){
+      if (e instanceof ForbiddenException) {
+        throw e;
+      } else {
+        throw new UnauthorizedException(e.message);
+      }
+    }
+    return {
+      token: token,
+      message: 'Contraseña cambiada correctamente'
+    };
+  }
+
 }
