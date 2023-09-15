@@ -8,6 +8,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
+  app.enableShutdownHooks(); // Habilitar el hot reload
 
   dotenv.config();
   const config = new DocumentBuilder()
