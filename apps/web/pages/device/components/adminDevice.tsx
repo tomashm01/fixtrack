@@ -5,6 +5,8 @@ import CreateButton, {
 } from 'apps/web/components/createButton';
 import { DeviceContext, useDevices } from '../hooks';
 import ListTable from 'apps/web/components/ListTable';
+import { Brand } from 'apps/web/services/auth';
+import { Type } from 'apps/web/services/auth';
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -46,8 +48,18 @@ const AdminDevice = () => {
   ];
 
   const createFields = [
-    { label: 'Tipo', type: 'text', fieldName: 'type' },
-    { label: 'Marca', type: 'text', fieldName: 'brand' },
+    {
+      label: 'Tipo',
+      type: 'select',
+      fieldName: 'type',
+      options: Object.values(Type)
+    },
+    {
+      label: 'Marca',
+      type: 'select',
+      fieldName: 'brand',
+      options: Object.values(Brand)
+    },
     { label: 'Modelo', type: 'text', fieldName: 'model' }
   ];
 

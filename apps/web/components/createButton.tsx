@@ -46,10 +46,16 @@ const CreateButton: FC<CreateButtonProps> = ({
 }) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [formData, setFormData] = useState<any>({});
+  const [formData, setFormData] = useState<any>(
+    Object.fromEntries(
+      fields.map(field => [
+        field.fieldName,
+        field.options ? field.options[0] : ''
+      ])
+    )
+  );
 
   const handleInputChange = (name: string, value: any) => {
-    console.log(`Setting ${name} to ${value}`);
     setFormData({
       ...formData,
       [name]: value
@@ -95,7 +101,10 @@ const CreateButton: FC<CreateButtonProps> = ({
                 <FormLabel>{field.label}</FormLabel>
                 {field.type === 'select' ? (
                   <Select
-                    value={formData.role || Object.values(KnownRoles)[0]}
+                    value={
+                      formData[field.fieldName] ||
+                      (field.options ? field.options[0] : '')
+                    }
                     onChange={e =>
                       handleInputChange(field.fieldName, e.target.value)
                     }
