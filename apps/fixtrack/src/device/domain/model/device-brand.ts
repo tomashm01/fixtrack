@@ -15,7 +15,7 @@ export class DeviceBrand extends ValueObject<Props> {
 
     if (!Object.values(Brand).includes(name as Brand)) {
       throw new Error(
-        `MARCA INVÁLIDA: ${name}. MARCAS VALIDAS: ${Object.values(Brand).join(
+        `MARCA INVÁLIDA: ${name}. MARCAS VÁLIDAS: ${Object.values(Brand).join(
           ', '
         )}`
       );
