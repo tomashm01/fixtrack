@@ -29,3 +29,9 @@ export const getRole = async (token: string | undefined) => {
 export const removeToken = () => {
   Cookies.remove('token');
 };
+
+export enum KnownRoles {
+  CLIENTE = 'CLIENTE',
+  TECNICO = 'TECNICO',
+  ADMIN = 'ADMIN'
+}

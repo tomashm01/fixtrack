@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, ReactElement, ChangeEvent, FC } from 'react';
 import {
   Button,
   Modal,
@@ -7,22 +7,38 @@ import {
   ModalHeader,
   ModalFooter,
   ModalBody,
-  ModalCloseButton,
-  Input,
   FormControl,
   FormLabel,
-  Text
+  Text,
+  Input,
+  Select,
+  Textarea,
+  ModalCloseButton
 } from '@chakra-ui/react';
 import { v4 as uuidv4 } from 'uuid';
+import { KnownRoles } from '../services/auth';
+
+interface FieldProps {
+  label: string;
+  type: string;
+  fieldName: string;
+  options?: string[];
+  onChange: (name: string, value: any) => void;
+}
 
 export interface CreateButtonProps {
-  fields: Array<{ label: string; type: string; fieldName: string }>;
+  fields: Array<{
+    label: string;
+    type: string;
+    fieldName: string;
+    options?: string[];
+  }>;
   apiUrl: string;
   title: string;
   onCreated?: (newItem: any) => void;
 }
 
-const CreateButton: React.FC<CreateButtonProps> = ({
+const CreateButton: FC<CreateButtonProps> = ({
   fields,
   apiUrl,
   title,
@@ -31,6 +47,14 @@ const CreateButton: React.FC<CreateButtonProps> = ({
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState<any>({});
+
+  const handleInputChange = (name: string, value: any) => {
+    console.log(`Setting ${name} to ${value}`);
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+  };
 
   const handleSubmit = async () => {
     const data = { ...formData, _id: uuidv4() };
@@ -43,16 +67,13 @@ const CreateButton: React.FC<CreateButtonProps> = ({
         body: JSON.stringify(data)
       });
       if (response.ok) {
-        console.log('Creado con éxito');
         if (onCreated) onCreated(data);
         setIsOpen(false);
       } else {
         const errorData = await response.json();
-        console.log(errorData);
         setErrorMessage(errorData.message || 'Ocurrió un error');
       }
     } catch (error) {
-      console.log('Ocurrió un error:', error);
       setErrorMessage('Ocurrió un error al enviar el formulario');
     }
   };
@@ -62,41 +83,50 @@ const CreateButton: React.FC<CreateButtonProps> = ({
       <Button colorScheme="teal" onClick={() => setIsOpen(true)}>
         Crear {title}
       </Button>
-
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader display="flex" justifyContent="center">
-            Crear nuevo {title}
-          </ModalHeader>
+          <ModalHeader>Crear nuevo {title}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            {errorMessage && (
-              <ModalHeader
-                color="red.500"
-                display="flex"
-                justifyContent="center"
-              >
-                <Text>{errorMessage}</Text>
-              </ModalHeader>
-            )}
+            {errorMessage && <Text color="red.500">{errorMessage}</Text>}
             {fields.map((field, index) => (
               <FormControl key={index}>
                 <FormLabel>{field.label}</FormLabel>
-                <Input
-                  type={field.type}
-                  onChange={e =>
-                    setFormData({
-                      ...formData,
-                      [field.fieldName]: e.target.value
-                    })
-                  }
-                />
+                {field.type === 'select' ? (
+                  <Select
+                    value={formData.role || Object.values(KnownRoles)[0]}
+                    onChange={e =>
+                      handleInputChange(field.fieldName, e.target.value)
+                    }
+                  >
+                    {field.options?.map((option, idx) => (
+                      <option key={idx} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </Select>
+                ) : field.type === 'textarea' ? (
+                  <Textarea
+                    placeholder={field.label}
+                    onChange={e =>
+                      handleInputChange(field.fieldName, e.target.value)
+                    }
+                  />
+                ) : (
+                  <Input
+                    type={field.type}
+                    placeholder={field.label}
+                    onChange={e =>
+                      handleInputChange(field.fieldName, e.target.value)
+                    }
+                  />
+                )}
               </FormControl>
             ))}
           </ModalBody>
-          <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={handleSubmit}>
+          <ModalFooter display="flex" justifyContent="center" gap="4">
+            <Button colorScheme="blue" onClick={handleSubmit}>
               Crear
             </Button>
             <Button onClick={() => setIsOpen(false)}>Cancelar</Button>

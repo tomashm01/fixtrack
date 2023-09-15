@@ -131,6 +131,6 @@ const Profile = (role: ProfileProps) => {
   );
 };
 
-export const getServerSideProps = withAuth();
+export const getServerSideProps = withAuth(['CLIENTE', 'TECNICO']);
 
 export default Profile;

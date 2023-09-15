@@ -23,6 +23,6 @@ const Dashboard = ({ role }: DashboardProps) => {
   );
 };
 
-export const getServerSideProps = withAuth();
+export const getServerSideProps = withAuth(['ADMIN', 'CLIENTE', 'TECNICO']);
 
 export default Dashboard;

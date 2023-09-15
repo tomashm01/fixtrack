@@ -6,7 +6,10 @@ import {
 } from 'next';
 import { getRole } from 'apps/web/services/auth';
 
-export const withAuth = (getServerSidePropsFunc?: GetServerSideProps) => {
+export const withAuth = (
+  allowedRoles: string[],
+  getServerSidePropsFunc?: GetServerSideProps
+) => {
   return async (
     context: GetServerSidePropsContext
   ): Promise<GetServerSidePropsResult<any>> => {
@@ -14,10 +17,10 @@ export const withAuth = (getServerSidePropsFunc?: GetServerSideProps) => {
     const token = parsedCookies.token;
     const role = await getRole(token);
 
-    if (!role) {
+    if (!role || !allowedRoles.includes(role)) {
       return {
         redirect: {
-          destination: '/login',
+          destination: role ? '/dashboard' : '/login',
           permanent: false
         }
       };

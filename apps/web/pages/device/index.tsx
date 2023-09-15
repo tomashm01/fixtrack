@@ -25,6 +25,6 @@ const Device = ({ role }: DeviceProps) => {
   );
 };
 
-export const getServerSideProps = withAuth();
+export const getServerSideProps = withAuth(['ADMIN', 'CLIENTE']);
 
 export default Device;

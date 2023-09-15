@@ -79,20 +79,28 @@ export class UserController {
       const password: string = await this.authService.hashPassword(
         createUserDto.password
       );
-      await this.mailService.sendEmail(
-        createUserDto.email,
-        'Bienvenido a FixTrack',
-        `<h1>Bienvenido a FixTrack</h1>
-        <p>Gracias por registrarte en FixTrack</p>
-        
-        `
-      );
+
       const user: UserDTO = await this.userService.createUser({
         ...createUserDto,
         password
       });
 
-      const tempToken = await this.authService.generateTempToken(user.id);
+      await this.mailService.sendEmail(
+        createUserDto.email,
+        'Bienvenido a FixTrack',
+        `<h1>Bienvenido a FixTrack</h1>
+        <p>Gracias por registrarte en FixTrack</p>
+          <div>
+            <p> Tus contraseña generada aleatoriamente es esta: </p>
+            <p> ${createUserDto.password} </p>
+          </div>
+        <p>Cambia tu contraseña al iniciar sesión con el siguiente enlace:</p>
+        <a href="http://localhost:4200/login">Clickeame</a>
+        <p>Si no has creado una cuenta en FixTrack, ignora este correo.</p>
+        <p>Saludos,</p>
+        <p>El equipo de FixTrack</p>
+        `
+      );
 
       return user;
     } catch (e) {

@@ -20,7 +20,7 @@ export const useUsers = () => {
         const data = await response.json();
         setUsers(data);
       } catch (e) {
-        //setError(e);
+        //setError(e.message);
       } finally {
         setLoading(false);
       }
@@ -29,5 +29,5 @@ export const useUsers = () => {
     fetchUsers();
   }, []);
 
-  return { users, setUsers, loading, error };
+  return { users, setUsers, loading };
 };
