@@ -11,8 +11,17 @@ export class WorkOrderWasCreated extends Event<CreateWorkOrderDTO> {
     public readonly startDate: Date,
     public readonly status: string,
     public readonly description: string,
-    public readonly price: number,
+    public readonly price: number
   ) {
-    super(id, { _id: id, idTechnician, idCustomer, idDevice, status, startDate, description, price});
+    super(id, {
+      _id: id,
+      idTechnician,
+      idCustomer,
+      idDevice,
+      status,
+      startDate,
+      description,
+      price
+    });
   }
 }

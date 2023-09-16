@@ -12,8 +12,18 @@ export class WorkOrderWasUpdated extends Event<WorkOrderDTO> {
     public readonly endDate: Date,
     public readonly status: string,
     public readonly description: string,
-    public readonly price: number,
+    public readonly price: number
   ) {
-    super(id, { _id: id, idTechnician, idCustomer, idDevice, status, startDate, endDate, description, price});
+    super(id, {
+      _id: id,
+      idTechnician,
+      idCustomer,
+      idDevice,
+      status,
+      startDate,
+      endDate,
+      description,
+      price
+    });
   }
 }

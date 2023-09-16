@@ -1,15 +1,15 @@
-import { EncryptedAggregateRoot } from "@aulasoftwarelibre/nestjs-eventstore";
-import { WorkOrderId } from "./work-order-id";
-import { WorkOrderStartDate } from "./work-order-start-date";
-import { WorkOrderEndDate } from "./work-order-end-date";
-import { WorkOrderStatus } from "./work-order-status";
-import { WorkOrderIdTechnician } from "./work-order-idTechnician";
-import { WorkOrderIdCustomer } from "./work-order-idCustomer";
-import { WorkOrderIdDevice } from "./work-order-idDevice";
-import { WorkOrderDescription } from "./work-order-description";
-import { WorkOrderPrice } from "./work-order-price";
+import { EncryptedAggregateRoot } from '@aulasoftwarelibre/nestjs-eventstore';
+import { WorkOrderId } from './work-order-id';
+import { WorkOrderStartDate } from './work-order-start-date';
+import { WorkOrderEndDate } from './work-order-end-date';
+import { WorkOrderStatus } from './work-order-status';
+import { WorkOrderIdTechnician } from './work-order-idTechnician';
+import { WorkOrderIdCustomer } from './work-order-idCustomer';
+import { WorkOrderIdDevice } from './work-order-idDevice';
+import { WorkOrderDescription } from './work-order-description';
+import { WorkOrderPrice } from './work-order-price';
 
-export class WorkOrder extends EncryptedAggregateRoot{
+export class WorkOrder extends EncryptedAggregateRoot {
   private _workOrderId: WorkOrderId;
   private _workOrderIdTechnician: WorkOrderIdTechnician;
   private _workOrderIdCustomer: WorkOrderIdCustomer;
@@ -153,5 +153,4 @@ export class WorkOrder extends EncryptedAggregateRoot{
   }
 
   */
-
 }

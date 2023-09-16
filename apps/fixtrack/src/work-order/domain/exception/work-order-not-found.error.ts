@@ -2,7 +2,6 @@ import { WorkOrderId } from '../model';
 import { WorkOrderError } from './work-order.error';
 
 export class WorkOrderNotFound extends WorkOrderError {
-  
   public static withId(id: WorkOrderId): WorkOrderNotFound {
     return new WorkOrderNotFound(`WORKORDER CON ID ${id.value} NO ENCONTRADO`);
   }
@@ -24,5 +23,4 @@ export class WorkOrderNotFound extends WorkOrderError {
       `WORKORDER CON ID ${id.value} Y TECNICO ${technicianId} NO ENCONTRADO`
     );
   }
-
 }

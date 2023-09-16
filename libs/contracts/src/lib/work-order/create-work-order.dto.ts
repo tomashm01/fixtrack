@@ -28,7 +28,7 @@ export class CreateWorkOrderDTO {
 
   @ApiProperty({
     example: 'PENDING',
-    description: 'The status of the work-order',
+    description: 'The status of the work-order'
   })
   status: string;
 
