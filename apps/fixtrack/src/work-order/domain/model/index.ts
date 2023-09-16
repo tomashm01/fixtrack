@@ -7,3 +7,4 @@ export * from './work-order-id';
 export * from './work-order-idCustomer';
 export * from './work-order-idDevice';
 export * from './work-order-idTechnician';
+export * from './work-order';
