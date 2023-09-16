@@ -25,6 +25,7 @@ import { UserRedisService } from './service/userRedis.service';
 import { UserFinderService, UserMongoFinder } from './service';
 import { AuthModule } from '../../auth/auth.module';
 import { MailService } from '../../mail.service';
+import { USER_FINDER } from '../application/service/user-finder.service';
 
 @Module({
   imports: [
@@ -64,6 +65,6 @@ import { MailService } from '../../mail.service';
     UserFinderService,
     MailService
   ],
-  exports: [UserService, MailService]
+  exports: [UserService, MailService, USER_FINDER]
 })
 export class UserModule {}

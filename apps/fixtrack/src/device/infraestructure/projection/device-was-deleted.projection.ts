@@ -15,7 +15,7 @@ export class DeviceWasDeletedProjection
   ) {}
 
   async handle(event: DeviceWasDeleted): Promise<void> {
-    const userView = await this.deviceProjection.findById(event.id).exec();
-    await userView.deleteOne({ _id: event.id });
+    const deviceView = await this.deviceProjection.findById(event.id).exec();
+    await deviceView.deleteOne({ _id: event.id });
   }
 }

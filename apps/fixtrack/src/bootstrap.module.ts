@@ -9,6 +9,7 @@ import { RedisModule } from './redis.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { EventStoreModule } from '@aulasoftwarelibre/nestjs-eventstore';
 import { DeviceModule } from './device';
+import { WorkOrderModule } from './work-order';
 
 @Module({
   imports: [
@@ -33,7 +34,8 @@ import { DeviceModule } from './device';
     ConsoleModule,
     UserModule,
     RedisModule,
-    DeviceModule
+    DeviceModule,
+    WorkOrderModule
   ]
 })
 export class BootstrapModule {}

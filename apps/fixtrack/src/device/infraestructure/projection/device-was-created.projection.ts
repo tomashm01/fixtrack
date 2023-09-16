@@ -15,9 +15,9 @@ export class DeviceWasCreatedProjection
   ) {}
 
   async handle(event: DeviceWasCreated): Promise<void> {
-    const user = new this.deviceProjection({
+    const device = new this.deviceProjection({
       ...event.payload
     });
-    await user.save();
+    await device.save();
   }
 }

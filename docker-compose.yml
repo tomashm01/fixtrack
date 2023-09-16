@@ -15,7 +15,8 @@ services:
       - eventstore
       - mailcatcher
     volumes:
-      - .:/fixtrack
+      - .:/app
+      - /app/node_modules
     networks:
       - network
 

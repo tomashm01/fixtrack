@@ -15,6 +15,7 @@ import {
   ProjectionHandlers
 } from './projection';
 import { DeviceMongoFinderService } from './service';
+import { DEVICE_FINDER } from '../application/service/device-finder.service';
 
 @Module({
   imports: [
@@ -45,6 +46,6 @@ import { DeviceMongoFinderService } from './service';
     ...ProjectionHandlers,
     DeviceMongoFinderService
   ],
-  exports: [DeviceMongoFinderService]
+  exports: [DeviceMongoFinderService, DEVICE_FINDER]
 })
 export class DeviceModule {}

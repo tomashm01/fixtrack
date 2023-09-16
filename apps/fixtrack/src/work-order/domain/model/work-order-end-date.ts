@@ -1,7 +1,7 @@
 import { ValueObject } from '@fixtrack/domain';
 
 interface Props {
-  value: string;
+  value: Date;
 }
 
 export class WorkOrderEndDate extends ValueObject<Props> {
@@ -14,10 +14,10 @@ export class WorkOrderEndDate extends ValueObject<Props> {
       throw new Error('End date cannot be in the future');
     }
 
-    return new WorkOrderEndDate({ value: date.toISOString().split('T')[0] });
+    return new WorkOrderEndDate({ value: date });
   }
 
-  get value(): string {
-    return this.props.value.toString();
+  get value(): Date {
+    return this.props.value;
   }
 }

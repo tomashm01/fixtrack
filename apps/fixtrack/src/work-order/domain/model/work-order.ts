@@ -8,6 +8,7 @@ import { WorkOrderIdCustomer } from './work-order-idCustomer';
 import { WorkOrderIdDevice } from './work-order-idDevice';
 import { WorkOrderDescription } from './work-order-description';
 import { WorkOrderPrice } from './work-order-price';
+import { WorkOrderWasCreated } from '../event';
 
 export class WorkOrder extends EncryptedAggregateRoot {
   private _workOrderId: WorkOrderId;
@@ -32,7 +33,7 @@ export class WorkOrder extends EncryptedAggregateRoot {
     workOrderPrice: WorkOrderPrice
   ): WorkOrder {
     const workOrder = new WorkOrder();
-    /*workOrder.apply(
+    workOrder.apply(
       new WorkOrderWasCreated(
         workOrderId.value,
         workOrderIdTechnician.value,
@@ -44,7 +45,7 @@ export class WorkOrder extends EncryptedAggregateRoot {
         workOrderPrice.value
       )
     );
-        */
+
     return workOrder;
   }
 
@@ -124,10 +125,11 @@ export class WorkOrder extends EncryptedAggregateRoot {
     return this._deleted;
   }
 
-  /*
   private onWorkOrderWasCreated(event: WorkOrderWasCreated) {
     this._workOrderId = WorkOrderId.with(event.id);
-    this._workOrderIdTechnician = WorkOrderIdTechnician.with(event.idTechnician);
+    this._workOrderIdTechnician = WorkOrderIdTechnician.with(
+      event.idTechnician
+    );
     this._workOrderIdCustomer = WorkOrderIdCustomer.with(event.idCustomer);
     this._workOrderIdDevice = WorkOrderIdDevice.with(event.idDevice);
     this._workOrderStartDate = WorkOrderStartDate.with(event.startDate);
@@ -135,7 +137,7 @@ export class WorkOrder extends EncryptedAggregateRoot {
     this._workOrderDescription = WorkOrderDescription.with(event.description);
     this._workOrderPrice = WorkOrderPrice.with(event.price);
   }
-
+  /*
   private onWorkOrderWasDeleted(event: WorkOrderWasDeleted) {
     this._deleted = true;
   }

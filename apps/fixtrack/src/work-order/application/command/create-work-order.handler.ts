@@ -21,6 +21,14 @@ import {
   WORK_ORDER_FINDER,
   WorkOrderFinder
 } from '../service/work-order-finder.service';
+import {
+  DEVICE_FINDER,
+  DeviceFinder
+} from 'apps/fixtrack/src/device/application/service/device-finder.service';
+import { USER_FINDER } from 'apps/fixtrack/src/user/application/service/user-finder.service';
+import { UserFinderService } from 'apps/fixtrack/src/user/infraestructure/service';
+import { DeviceNotFoundError } from 'apps/fixtrack/src/device/domain';
+import { UserNotFoundError } from 'apps/fixtrack/src/user/domain';
 
 @CommandHandler(CreateWorkOrderCommand)
 export class CreateWorkOrderHandler
@@ -29,7 +37,10 @@ export class CreateWorkOrderHandler
   constructor(
     @InjectAggregateRepository(WorkOrder)
     private readonly workOrders: AggregateRepository<WorkOrder, WorkOrderId>,
-    @Inject(WORK_ORDER_FINDER) private readonly workOrderFinder: WorkOrderFinder
+    @Inject(WORK_ORDER_FINDER)
+    private readonly workOrderFinder: WorkOrderFinder,
+    @Inject(DEVICE_FINDER) private readonly deviceFinder: DeviceFinder,
+    @Inject(USER_FINDER) private readonly userFinder: UserFinderService
   ) {}
 
   async execute(command: CreateWorkOrderCommand): Promise<WorkOrder> {
@@ -55,14 +66,23 @@ export class CreateWorkOrderHandler
     if ((await this.workOrderFinder.findById(workOrderId)) != null)
       throw WorkOrderAlreadyExistsError.withId(workOrderId);
 
+    if ((await this.deviceFinder.findById(deviceId)) == null)
+      throw DeviceNotFoundError.withId(deviceId);
+
+    if ((await this.userFinder.findById(userId)) == null)
+      throw UserNotFoundError.withId(userId);
+
+    if ((await this.userFinder.findById(technicianId)) == null)
+      throw UserNotFoundError.withId(technicianId);
+
     const workOrder: WorkOrder = WorkOrder.add(
       workOrderId,
-      userId,
       technicianId,
+      userId,
       deviceId,
-      description,
-      status,
       startDate,
+      status,
+      description,
       price
     );
 
