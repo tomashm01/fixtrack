@@ -40,12 +40,6 @@ export class WorkOrderDTO {
   startDate: Date;
 
   @ApiProperty({
-    example: '2021-05-05T00:00:00.000Z',
-    description: 'The end date of the work-order'
-  })
-  endDate: Date;
-
-  @ApiProperty({
     example: 100,
     description: 'The price of the work-order'
   })
@@ -56,4 +50,10 @@ export class WorkOrderDTO {
     description: 'The description of the work-order'
   })
   description: string;
+
+  @ApiProperty({
+    example: '2021-05-05T00:00:00.000Z',
+    description: 'The end date of the work-order'
+  })
+  endDate?: Date;
 }

@@ -3,10 +3,19 @@ import { CqrsModule } from '@nestjs/cqrs';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
-import { CreateWorkOrderDTO } from '@fixtrack/contracts';
+import {
+  CreateWorkOrderDTO,
+  DeleteWorkOrderDTO,
+  WorkOrderDTO
+} from '@fixtrack/contracts';
 import { QueryHandlers } from '../application/query';
 import { CommandHandlers } from '../application/command';
-import { WorkOrder, WorkOrderWasCreated } from '../domain';
+import {
+  WorkOrder,
+  WorkOrderWasCreated,
+  WorkOrderWasDeleted,
+  WorkOrderWasUpdated
+} from '../domain';
 import { WorkOrderController } from './controller/work-order.controller';
 import { WorkOrderProviders } from '../work-order.provider';
 import { WorkOrderMongoFinderService } from './service/workOrderMongoFinder.service';
@@ -16,7 +25,6 @@ import {
   WorkOrderSchema
 } from './projection';
 import { UserModule } from '../../user';
-import { AuthModule } from '../../auth/auth.module';
 import { DeviceModule } from '../../device';
 
 @Module({
@@ -41,7 +49,21 @@ import { DeviceModule } from '../../device';
           event.payload.status,
           event.payload.description,
           event.payload.price
-        )
+        ),
+      WorkOrderWasUpdated: (event: Event<WorkOrderDTO>) =>
+        new WorkOrderWasUpdated(
+          event.payload._id,
+          event.payload.idTechnician,
+          event.payload.idCustomer,
+          event.payload.idDevice,
+          event.payload.startDate,
+          event.payload.status,
+          event.payload.description,
+          event.payload.price,
+          event.payload.endDate
+        ),
+      WorkOrderWasDeleted: (event: Event<DeleteWorkOrderDTO>) =>
+        new WorkOrderWasDeleted(event.payload._id)
     })
   ],
   controllers: [WorkOrderController],

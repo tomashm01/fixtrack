@@ -8,7 +8,11 @@ import { WorkOrderIdCustomer } from './work-order-idCustomer';
 import { WorkOrderIdDevice } from './work-order-idDevice';
 import { WorkOrderDescription } from './work-order-description';
 import { WorkOrderPrice } from './work-order-price';
-import { WorkOrderWasCreated } from '../event';
+import {
+  WorkOrderWasCreated,
+  WorkOrderWasDeleted,
+  WorkOrderWasUpdated
+} from '../event';
 
 export class WorkOrder extends EncryptedAggregateRoot {
   private _workOrderId: WorkOrderId;
@@ -49,36 +53,37 @@ export class WorkOrder extends EncryptedAggregateRoot {
     return workOrder;
   }
 
-  updateWorkOrder(
+  update(
     workOrderId: WorkOrderId,
     workOrderIdTechnician: WorkOrderIdTechnician,
     workOrderIdCustomer: WorkOrderIdCustomer,
     workOrderIdDevice: WorkOrderIdDevice,
     workOrderStartDate: WorkOrderStartDate,
-    workOrderEndDate: WorkOrderEndDate,
     workOrderStatus: WorkOrderStatus,
     workOrderDescription: WorkOrderDescription,
-    workOrderPrice: WorkOrderPrice
+    workOrderPrice: WorkOrderPrice,
+    workOrderEndDate?: WorkOrderEndDate
   ): void {
     if (!this._deleted) {
-      /*this.apply(
+      this.apply(
         new WorkOrderWasUpdated(
           workOrderId.value,
           workOrderIdTechnician.value,
           workOrderIdCustomer.value,
           workOrderIdDevice.value,
           workOrderStartDate.value,
-          workOrderEndDate.value,
           workOrderStatus.value,
           workOrderDescription.value,
-          workOrderPrice.value
+          workOrderPrice.value,
+          workOrderEndDate.value
         )
-      );*/
+      );
     }
   }
 
   delete(): void {
-    //if (!this._deleted) this.apply(new WorkOrderWasDeleted(this._workOrderId.value));
+    if (!this._deleted)
+      this.apply(new WorkOrderWasDeleted(this._workOrderId.value));
   }
 
   public aggregateId(): string {
@@ -133,18 +138,21 @@ export class WorkOrder extends EncryptedAggregateRoot {
     this._workOrderIdCustomer = WorkOrderIdCustomer.with(event.idCustomer);
     this._workOrderIdDevice = WorkOrderIdDevice.with(event.idDevice);
     this._workOrderStartDate = WorkOrderStartDate.with(event.startDate);
+    this._workOrderEndDate = WorkOrderEndDate.with(null);
     this._workOrderStatus = WorkOrderStatus.with(event.status);
     this._workOrderDescription = WorkOrderDescription.with(event.description);
     this._workOrderPrice = WorkOrderPrice.with(event.price);
   }
-  /*
+
   private onWorkOrderWasDeleted(event: WorkOrderWasDeleted) {
     this._deleted = true;
   }
 
   private onWorkOrderWasUpdated(event: WorkOrderWasUpdated) {
     this._workOrderId = WorkOrderId.with(event.id);
-    this._workOrderIdTechnician = WorkOrderIdTechnician.with(event.idTechnician);
+    this._workOrderIdTechnician = WorkOrderIdTechnician.with(
+      event.idTechnician
+    );
     this._workOrderIdCustomer = WorkOrderIdCustomer.with(event.idCustomer);
     this._workOrderIdDevice = WorkOrderIdDevice.with(event.idDevice);
     this._workOrderStartDate = WorkOrderStartDate.with(event.startDate);
@@ -153,6 +161,4 @@ export class WorkOrder extends EncryptedAggregateRoot {
     this._workOrderDescription = WorkOrderDescription.with(event.description);
     this._workOrderPrice = WorkOrderPrice.with(event.price);
   }
-
-  */
 }

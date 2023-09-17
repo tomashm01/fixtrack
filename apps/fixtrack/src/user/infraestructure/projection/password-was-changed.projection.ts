@@ -18,7 +18,6 @@ export class PasswordWasChangedProjection
 
   async handle(event: PasswordWasChanged): Promise<void> {
     const user = await this.userProjection.findOne({ _id: event.id });
-    console.log(user);
     if (!user) return;
 
     user.password = event.password;

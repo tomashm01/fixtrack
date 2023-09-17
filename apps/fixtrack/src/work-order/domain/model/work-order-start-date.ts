@@ -6,7 +6,7 @@ interface Props {
 
 export class WorkOrderStartDate extends ValueObject<Props> {
   public static with(date: Date): WorkOrderStartDate {
-    if (date.toString() === '') {
+    if (date === null) {
       throw new Error('Invalid time value');
     }
 
