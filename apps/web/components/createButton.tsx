@@ -1,4 +1,4 @@
-import { useState, ReactElement, ChangeEvent, FC } from 'react';
+import { useState, useEffect, FC } from 'react';
 import {
   Button,
   Modal,
@@ -16,25 +16,18 @@ import {
   ModalCloseButton
 } from '@chakra-ui/react';
 import { v4 as uuidv4 } from 'uuid';
-import { KnownRoles } from '../services/auth';
-
-interface FieldProps {
-  label: string;
-  type: string;
-  fieldName: string;
-  options?: string[];
-  onChange: (name: string, value: any) => void;
-}
 
 export interface CreateButtonProps {
   fields: Array<{
     label: string;
     type: string;
     fieldName: string;
-    options?: string[];
+    options?: any[];
+    optionRenderer?: (option: any) => string;
   }>;
   apiUrl: string;
   title: string;
+  defaultValues?: { [key: string]: any };
   onCreated?: (newItem: any) => void;
 }
 
@@ -42,18 +35,38 @@ const CreateButton: FC<CreateButtonProps> = ({
   fields,
   apiUrl,
   title,
-  onCreated
+  onCreated,
+  defaultValues
 }) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [formData, setFormData] = useState<any>(
-    Object.fromEntries(
+  const [formData, setFormData] = useState<any>({
+    ...Object.fromEntries(
       fields.map(field => [
         field.fieldName,
         field.options ? field.options[0] : ''
       ])
-    )
-  );
+    ),
+    ...defaultValues
+  });
+
+  useEffect(() => {
+    const defaultSelectValues = Object.fromEntries(
+      fields
+        .filter(field => field.type === 'select' && field.options)
+        .map(field => {
+          const firstOption = field.options?.[0];
+          return [
+            field.fieldName,
+            firstOption ? firstOption.id || firstOption._id : ''
+          ];
+        })
+    );
+    setFormData((prevFormData: typeof formData) => ({
+      ...prevFormData,
+      ...defaultSelectValues
+    }));
+  }, [fields]);
 
   const handleInputChange = (name: string, value: any) => {
     setFormData({
@@ -110,8 +123,10 @@ const CreateButton: FC<CreateButtonProps> = ({
                     }
                   >
                     {field.options?.map((option, idx) => (
-                      <option key={idx} value={option}>
-                        {option}
+                      <option key={idx} value={option.id || option._id}>
+                        {field.optionRenderer
+                          ? field.optionRenderer(option)
+                          : option}
                       </option>
                     ))}
                   </Select>

@@ -15,7 +15,7 @@ import {
   Heading,
   Text
 } from '@chakra-ui/react';
-import CreateButton, { CreateButtonProps } from './createButton';
+import CreateButton, { CreateButtonProps } from './CreateButton';
 
 interface TableProps {
   columns: Array<{ header: string; accessor: string }>;

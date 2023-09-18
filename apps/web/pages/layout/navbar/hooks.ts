@@ -1,6 +1,12 @@
 import { useMemo } from 'react';
 import { useRouter } from 'next/router';
-import { FaHome, FaMobileAlt, FaSignOutAlt, FaUserAlt } from 'react-icons/fa';
+import {
+  FaHome,
+  FaMobileAlt,
+  FaShoppingCart,
+  FaSignOutAlt,
+  FaUserAlt
+} from 'react-icons/fa';
 import { ROUTES } from '../../../services/routing/routes/constants';
 
 const useNavbar = (role: string) => {
@@ -16,6 +22,13 @@ const useNavbar = (role: string) => {
         isActive: isActive(ROUTES.HOME),
         route: ROUTES.HOME,
         roles: ['ADMIN', 'CLIENTE', 'TECNICO']
+      },
+      {
+        icon: FaShoppingCart,
+        id: 'Reparaciones',
+        isActive: isActive(ROUTES.WORDK_ORDER),
+        route: ROUTES.WORDK_ORDER,
+        roles: ['ADMIN', 'TECNICO']
       },
       {
         icon: FaUserAlt,

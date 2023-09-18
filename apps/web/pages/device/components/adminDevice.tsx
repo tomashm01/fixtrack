@@ -1,9 +1,7 @@
 import { useContext } from 'react';
 
-import CreateButton, {
-  CreateButtonProps
-} from 'apps/web/components/createButton';
-import { DeviceContext, useDevices } from '../hooks';
+import { CreateButtonProps } from 'apps/web/components/CreateButton';
+import { DeviceContext } from '../hooks';
 import ListTable from 'apps/web/components/ListTable';
 import { Brand } from 'apps/web/services/auth';
 import { Type } from 'apps/web/services/auth';
@@ -27,10 +25,10 @@ const AdminDevice = () => {
           : [];
         if (setDevices) setDevices(updatedDevices);
       } else {
-        console.log('No se pudo eliminar el usuario');
+        console.log('No se pudo eliminar el dispositivo');
       }
     } catch (error) {
-      console.log('Ocurrió un error al eliminar el usuario:', error);
+      console.log('Ocurrió un error al eliminar el dispositivo:', error);
     }
   };
 

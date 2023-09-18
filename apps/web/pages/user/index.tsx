@@ -2,7 +2,7 @@ import { withAuth } from 'apps/web/hoc';
 import Navbar from '../layout/navbar';
 import { useUsers } from './hooks';
 import ListTable from 'apps/web/components/ListTable';
-import { CreateButtonProps } from 'apps/web/components/createButton';
+import { CreateButtonProps } from 'apps/web/components/CreateButton';
 import { KnownRoles } from 'apps/web/services/auth';
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
