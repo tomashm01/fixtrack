@@ -39,6 +39,34 @@ const AdminOrder = () => {
     }
   };
 
+  const handleUpdate = async (updatedData: any) => {
+    try {
+      const response = await fetch(`${apiUrl}/workorder`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updatedData)
+      });
+
+      if (response.ok) {
+        if (setWorkOrders && workOrders) {
+          const updatedOrders = workOrders.map(order =>
+            order._id === updatedData._id ? { ...order, ...updatedData } : order
+          );
+          setWorkOrders(updatedOrders);
+        }
+      } else {
+        console.error('No se pudo actualizar la orden de trabajo');
+      }
+    } catch (error) {
+      console.error(
+        'Ocurrió un error al actualizar la orden de trabajo:',
+        error
+      );
+    }
+  };
+
   const handleWorkOrderCreated = (newWorkOrder: any) => {
     if (setWorkOrders && workOrders) {
       setWorkOrders([...workOrders, newWorkOrder]);
@@ -48,21 +76,21 @@ const AdminOrder = () => {
   const createFields = [
     {
       label: 'Cliente',
-      type: 'select',
+      type: 'filtrableSelect',
       fieldName: 'idCustomer',
       options: customers,
       optionRenderer: (customer: UserDTO) => customer.email
     },
     {
       label: 'Tecnico',
-      type: 'select',
+      type: 'filtrableSelect',
       fieldName: 'idTechnician',
       options: technicians,
       optionRenderer: (technician: UserDTO) => technician.email
     },
     {
       label: 'Dispositivo',
-      type: 'select',
+      type: 'filtrableSelect',
       fieldName: 'idDevice',
       options: devices,
       optionRenderer: (device: DeviceDTO) => `${device.brand} ${device.model}`
@@ -85,9 +113,10 @@ const AdminOrder = () => {
   return (
     <>
       <ListAccordion
-        data={workOrders || []}
         title="órdenes de trabajo"
         createButton={createButtonProps}
+        handleDelete={handleDelete}
+        handleUpdate={handleUpdate}
       />
     </>
   );

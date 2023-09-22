@@ -11,16 +11,20 @@ interface WorkOrderContextProps {
   error?: any;
 }
 
-export const WorkOrderContext = createContext<WorkOrderContextProps>({});
+export const WorkOrderContext = createContext<WorkOrderContextProps>({
+  workOrders: [],
+  setWorkOrders: () => {},
+  loading: true,
+  error: null
+});
 
 export const useWorkOrders = () => {
   const [workOrders, setWorkOrders] = useState<WorkOrderDTO[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchWorkOrders = async () => {
-      setLoading(true);
       try {
         const response = await fetch(`${apiURL}/workorder`, {
           headers: {
@@ -28,10 +32,17 @@ export const useWorkOrders = () => {
             Accept: 'application/json'
           }
         });
+        if (!response.ok) {
+          throw new Error(`Error fetching work orders: ${response.statusText}`);
+        }
         const data = await response.json();
         setWorkOrders(data);
       } catch (e) {
-        //setError(e);
+        if (e instanceof Error) {
+          setError(e.message);
+        } else {
+          setError('An unknown error occurred');
+        }
       } finally {
         setLoading(false);
       }

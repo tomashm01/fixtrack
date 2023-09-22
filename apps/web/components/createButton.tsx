@@ -16,6 +16,7 @@ import {
   ModalCloseButton
 } from '@chakra-ui/react';
 import { v4 as uuidv4 } from 'uuid';
+import FiltrableSelect from './FiltrableSelect';
 
 export interface CreateButtonProps {
   fields: Array<{
@@ -40,32 +41,23 @@ const CreateButton: FC<CreateButtonProps> = ({
 }) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [formData, setFormData] = useState<any>({
-    ...Object.fromEntries(
-      fields.map(field => [
-        field.fieldName,
-        field.options ? field.options[0] : ''
-      ])
-    ),
-    ...defaultValues
-  });
+  const [formData, setFormData] = useState<any>({ ...defaultValues });
 
   useEffect(() => {
-    const defaultSelectValues = Object.fromEntries(
-      fields
-        .filter(field => field.type === 'select' && field.options)
-        .map(field => {
-          const firstOption = field.options?.[0];
-          return [
-            field.fieldName,
-            firstOption ? firstOption.id || firstOption._id : ''
-          ];
-        })
+    const defaultValues = Object.fromEntries(
+      fields.map(field => {
+        let defaultValue = '';
+        if (field.type === 'filtrableSelect' || field.type === 'select') {
+          const firstOption =
+            field.options?.[0]?.id ||
+            field.options?.[0]?._id ||
+            field.options?.[0];
+          defaultValue = firstOption || '';
+        }
+        return [field.fieldName, defaultValue];
+      })
     );
-    setFormData((prevFormData: typeof formData) => ({
-      ...prevFormData,
-      ...defaultSelectValues
-    }));
+    setFormData({ ...defaultValues });
   }, [fields]);
 
   const handleInputChange = (name: string, value: any) => {
@@ -76,7 +68,7 @@ const CreateButton: FC<CreateButtonProps> = ({
   };
 
   const handleSubmit = async () => {
-    const data = { ...formData, _id: uuidv4() };
+    const data = { ...formData, ...defaultValues, _id: uuidv4() };
     try {
       const response = await fetch(apiUrl, {
         method: 'POST',
@@ -85,6 +77,7 @@ const CreateButton: FC<CreateButtonProps> = ({
         },
         body: JSON.stringify(data)
       });
+      console.log(await response.json());
       if (response.ok) {
         if (onCreated) onCreated(data);
         setIsOpen(false);
@@ -93,6 +86,7 @@ const CreateButton: FC<CreateButtonProps> = ({
         setErrorMessage(errorData.message || 'Ocurrió un error');
       }
     } catch (error) {
+      console.log('Ocurrió un error al enviar el formulario:', error);
       setErrorMessage('Ocurrió un error al enviar el formulario');
     }
   };
@@ -112,11 +106,31 @@ const CreateButton: FC<CreateButtonProps> = ({
             {fields.map((field, index) => (
               <FormControl key={index}>
                 <FormLabel>{field.label}</FormLabel>
-                {field.type === 'select' ? (
+                {field.type === 'filtrableSelect' ? (
+                  <FiltrableSelect
+                    options={
+                      field.options
+                        ? field.options.map(option => ({
+                            label: field.optionRenderer
+                              ? field.optionRenderer(option)
+                              : option,
+                            value: option.id || option._id
+                          }))
+                        : []
+                    }
+                    value={formData[field.fieldName] || ''}
+                    onChange={(value: any) =>
+                      handleInputChange(field.fieldName, value)
+                    }
+                    placeholder={`Buscar ${field.label}`}
+                  />
+                ) : field.type === 'select' ? (
                   <Select
                     value={
                       formData[field.fieldName] ||
-                      (field.options ? field.options[0] : '')
+                      (field.options
+                        ? field.options[0]?.id || field.options[0]?._id
+                        : '')
                     }
                     onChange={e =>
                       handleInputChange(field.fieldName, e.target.value)
