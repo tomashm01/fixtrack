@@ -2,7 +2,6 @@ import { WorkOrderDTO } from '@fixtrack/contracts';
 import {
   WorkOrderId,
   WorkOrderIdCustomer,
-  WorkOrderIdDevice,
   WorkOrderIdTechnician
 } from '../../domain';
 
@@ -15,5 +14,4 @@ export interface WorkOrderFinder {
   findByTechnicianId(
     technicianId: WorkOrderIdTechnician
   ): Promise<WorkOrderDTO[]>;
-  findByDeviceId(deviceId: WorkOrderIdDevice): Promise<WorkOrderDTO[]>;
 }

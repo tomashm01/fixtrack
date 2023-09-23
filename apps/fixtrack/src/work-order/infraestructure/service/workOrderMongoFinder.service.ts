@@ -20,24 +20,22 @@ export class WorkOrderMongoFinderService implements WorkOrderFinder {
   ) {}
 
   async findAll(): Promise<WorkOrderDTO[]> {
-    return this.workOrderModel.find().exec();
+    return await this.workOrderModel.find().exec();
   }
 
   async findById(id: WorkOrderId): Promise<WorkOrderDTO | null> {
-    return this.workOrderModel.findById({ _id: id.value }).exec();
+    return await this.workOrderModel.findById({ _id: id.value }).exec();
   }
 
   async findByUserId(userId: WorkOrderIdCustomer): Promise<WorkOrderDTO[]> {
-    return this.workOrderModel.find({ idCustomer: userId }).exec();
+    return await this.workOrderModel.find({ idCustomer: userId.value }).exec();
   }
 
   async findByTechnicianId(
     technicianId: WorkOrderIdTechnician
   ): Promise<WorkOrderDTO[]> {
-    return this.workOrderModel.find({ idTechnician: technicianId }).exec();
-  }
-
-  async findByDeviceId(deviceId: WorkOrderIdDevice): Promise<WorkOrderDTO[]> {
-    return this.workOrderModel.find({ idDevice: deviceId }).exec();
+    return await this.workOrderModel
+      .find({ idTechnician: technicianId.value })
+      .exec();
   }
 }

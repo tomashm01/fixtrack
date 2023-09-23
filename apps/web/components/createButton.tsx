@@ -77,7 +77,6 @@ const CreateButton: FC<CreateButtonProps> = ({
         },
         body: JSON.stringify(data)
       });
-      console.log(await response.json());
       if (response.ok) {
         if (onCreated) onCreated(data);
         setIsOpen(false);

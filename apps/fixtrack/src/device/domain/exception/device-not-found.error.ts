@@ -1,7 +1,7 @@
+import { NotFoundException } from '@nestjs/common';
 import { DeviceId } from '../model';
-import { DeviceError } from './device.error';
 
-export class DeviceNotFoundError extends DeviceError {
+export class DeviceNotFoundError extends NotFoundException {
   public static withId(id: DeviceId): DeviceNotFoundError {
     return new DeviceNotFoundError(`Device with id ${id.value} not found`);
   }

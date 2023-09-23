@@ -10,6 +10,8 @@ import {
   Controller,
   Delete,
   Get,
+  InternalServerErrorException,
+  NotFoundException,
   Param,
   Patch,
   Post
@@ -26,6 +28,9 @@ import {
 import { catchError } from 'apps/fixtrack/src/utils';
 import { UpdateWorkOrderCommand } from '../../application/command/update-work-order.command';
 import { DeleteWorkOrderCommand } from '../../application/command/delete-work-order.command';
+import { GetWorkOrdersByUserIdQuery } from '../../application/query/get-work-orders-by-userId.query';
+import { UserNotFoundError } from 'apps/fixtrack/src/user/domain';
+import { GetWorkOrdersByTechIdQuery } from '../../application/query/get-work-orders-by-techId.query';
 
 @ApiTags('WorkOrderController')
 @Controller('WorkOrder')
@@ -96,7 +101,7 @@ export class WorkOrderController {
       };
     } catch (e) {
       if (e instanceof WorkOrderNotFound) {
-        throw new ConflictException(e.message);
+        throw new NotFoundException(e.message);
       } else {
         throw catchError(e);
       }
@@ -115,9 +120,39 @@ export class WorkOrderController {
       };
     } catch (e) {
       if (e instanceof WorkOrderNotFound) {
-        throw new ConflictException(e.message);
+        throw new NotFoundException(e.message);
       } else {
         throw catchError(e);
+      }
+    }
+  }
+
+  @Get('user/:idUser')
+  @ApiOperation({ summary: 'Obtener órdenes de trabajo de usuario por idUser' })
+  @ApiOkResponse({ type: WorkOrderDTO })
+  async findByUserId(@Param('idUser') id: string): Promise<WorkOrderDTO[]> {
+    try {
+      return this.queryBus.execute(new GetWorkOrdersByUserIdQuery(id));
+    } catch (e) {
+      if (e instanceof UserNotFoundError) {
+        throw new NotFoundException(e.message);
+      } else {
+        throw new InternalServerErrorException(e.message);
+      }
+    }
+  }
+
+  @Get('tech/:idTech')
+  @ApiOperation({ summary: 'Obtener órdenes de trabajo de técnico por idTech' })
+  @ApiOkResponse({ type: WorkOrderDTO })
+  async findByTechId(@Param('idTech') id: string): Promise<WorkOrderDTO[]> {
+    try {
+      return this.queryBus.execute(new GetWorkOrdersByTechIdQuery(id));
+    } catch (e) {
+      if (e instanceof UserNotFoundError) {
+        throw new NotFoundException(e.message);
+      } else {
+        throw new InternalServerErrorException(e.message);
       }
     }
   }
