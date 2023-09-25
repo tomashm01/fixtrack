@@ -5,7 +5,7 @@ import { GetServerSideProps } from 'next';
 import Landing from './landing';
 import { getRole } from '../services/auth';
 
-const Index = () => {
+const Index = ({ role, id }: any) => {
   return <Landing />;
 };
 
@@ -17,7 +17,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
     return { props: {} };
   }
 
-  const role = await getRole(token);
+  const { role, id }: any = await getRole(token);
 
   if (!role) {
     return {
@@ -37,7 +37,12 @@ export const getServerSideProps: GetServerSideProps = async context => {
     };
   }
 
-  return { props: {} };
+  return {
+    props: {
+      role,
+      id
+    }
+  };
 };
 
 export default Index;

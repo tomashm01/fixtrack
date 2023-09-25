@@ -28,14 +28,21 @@ export class WorkOrderMongoFinderService implements WorkOrderFinder {
   }
 
   async findByUserId(userId: WorkOrderIdCustomer): Promise<WorkOrderDTO[]> {
-    return await this.workOrderModel.find({ idCustomer: userId.value }).exec();
+    return await this.workOrderModel
+      .find({ idCustomer: userId.value })
+      .sort({ startDate: -1 })
+      .exec();
   }
 
   async findByTechnicianId(
     technicianId: WorkOrderIdTechnician
   ): Promise<WorkOrderDTO[]> {
     return await this.workOrderModel
-      .find({ idTechnician: technicianId.value })
+      .find({
+        idTechnician: technicianId.value,
+        $or: [{ endDate: { $exists: false } }, { endDate: null }]
+      })
+      .sort({ startDate: 1 })
       .exec();
   }
 }

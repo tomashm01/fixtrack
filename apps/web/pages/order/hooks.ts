@@ -1,6 +1,7 @@
 import { useEffect, useState, createContext } from 'react';
 
 import { WorkOrderDTO } from '@fixtrack/contracts';
+import { getRole } from 'apps/web/services/auth';
 
 const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -18,15 +19,22 @@ export const WorkOrderContext = createContext<WorkOrderContextProps>({
   error: null
 });
 
-export const useWorkOrders = () => {
+export const useWorkOrders = (userId: string | null, role: string) => {
   const [workOrders, setWorkOrders] = useState<WorkOrderDTO[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    const endpoint =
+      role === 'ADMIN'
+        ? '/workorder'
+        : role === 'TECNICO'
+        ? `/workorder/tech/${userId}`
+        : `/workorder/user/${userId}`;
+
     const fetchWorkOrders = async () => {
       try {
-        const response = await fetch(`${apiURL}/workorder`, {
+        const response = await fetch(`${apiURL}${endpoint}`, {
           headers: {
             'Content-Type': 'application/json',
             Accept: 'application/json'
@@ -49,7 +57,7 @@ export const useWorkOrders = () => {
     };
 
     fetchWorkOrders();
-  }, []);
+  }, [userId, role]);
 
   return { workOrders, setWorkOrders, loading, error };
 };

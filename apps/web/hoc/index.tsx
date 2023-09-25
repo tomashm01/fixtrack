@@ -15,7 +15,7 @@ export const withAuth = (
   ): Promise<GetServerSidePropsResult<any>> => {
     const parsedCookies = cookie.parse(context.req.headers.cookie || '');
     const token = parsedCookies.token;
-    const role = await getRole(token);
+    const { role, id }: any = await getRole(token);
 
     if (!role || !allowedRoles.includes(role)) {
       return {
@@ -36,14 +36,16 @@ export const withAuth = (
         ...originalProps,
         props: {
           ...originalProps.props,
-          role
+          role,
+          id
         }
       };
     } else {
       return {
         ...originalProps,
         props: {
-          role
+          role,
+          id
         }
       };
     }

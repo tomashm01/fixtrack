@@ -6,13 +6,15 @@ interface FiltrableSelectProps {
   value: string;
   onChange: (value: string) => void;
   placeholder: string;
+  isDisabled?: boolean;
 }
 
 const FiltrableSelect: React.FC<FiltrableSelectProps> = ({
   options = [],
   value,
   onChange,
-  placeholder
+  placeholder,
+  isDisabled = false
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isOpen, setIsOpen] = useState(false);
@@ -40,8 +42,9 @@ const FiltrableSelect: React.FC<FiltrableSelectProps> = ({
         placeholder={placeholder}
         value={searchTerm}
         onChange={handleSearch}
-        onFocus={() => setIsOpen(true)}
+        onFocus={() => !isDisabled && setIsOpen(true)}
         onBlur={() => setTimeout(() => setIsOpen(false), 200)}
+        readOnly={isDisabled}
       />
       {isOpen && (
         <Box

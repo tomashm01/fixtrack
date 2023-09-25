@@ -2,20 +2,22 @@ import { withAuth } from '../../hoc/index';
 import Navbar from '../layout/navbar';
 
 import AdminOrder from './components/adminOrder';
+import CustomerOrder from './components/customerOrder';
 import TechOrder from './components/techOrder';
 import { WorkOrderContext, useWorkOrders } from './hooks';
 
-const workOrderMapper: Record<string, JSX.Element> = {
-  ADMIN: <AdminOrder />,
-  TECNICO: <TechOrder />
-};
-
 interface WorkOrderProps {
   role: string;
+  id: string;
 }
 
-const WorkOrder = ({ role }: WorkOrderProps) => {
-  const { workOrders, setWorkOrders, loading, error } = useWorkOrders();
+const WorkOrder = ({ role, id }: WorkOrderProps) => {
+  const workOrderMapper: Record<string, JSX.Element> = {
+    ADMIN: <AdminOrder />,
+    TECNICO: <TechOrder />,
+    CLIENTE: <CustomerOrder role={role} id={id} />
+  };
+  const { workOrders, setWorkOrders, loading, error } = useWorkOrders(id, role);
 
   return (
     <WorkOrderContext.Provider
@@ -27,6 +29,6 @@ const WorkOrder = ({ role }: WorkOrderProps) => {
   );
 };
 
-export const getServerSideProps = withAuth(['ADMIN', 'TECNICO']);
+export const getServerSideProps = withAuth(['ADMIN', 'TECNICO', 'CLIENTE']);
 
 export default WorkOrder;

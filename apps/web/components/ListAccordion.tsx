@@ -16,7 +16,6 @@ import {
   MenuList,
   MenuItem,
   Heading,
-  TableContainer,
   Editable,
   EditableInput,
   EditablePreview
@@ -30,9 +29,9 @@ import { WorkOrderContext } from '../pages/order/hooks';
 
 interface ListAccordionProps {
   title: string;
-  createButton: CreateButtonProps;
-  handleDelete: (id: string) => void;
-  handleUpdate: (data: any) => void;
+  createButton?: CreateButtonProps;
+  handleDelete?: (id: string) => void;
+  handleUpdate?: (data: any) => void;
 }
 
 const statusColors = {
@@ -55,45 +54,51 @@ const statusTransitions = {
   WAITING_FOR_PICKUP: ['FINISHED']
 };
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-
 const StatusMenu: React.FC<{
   currentStatus: string;
   transitions: string[];
   onChange: (newStatus: string) => void;
-}> = ({ currentStatus, transitions, onChange }) => (
-  <Menu>
-    {({ isOpen }) => (
-      <>
-        <MenuButton
-          as="div"
-          role="button"
-          cursor="pointer"
-          tabIndex={0}
-          style={{
-            padding: '8px',
-            borderWidth: '1px',
-            borderRadius: '4px',
-            borderColor:
-              statusColors[currentStatus as keyof typeof statusColors] ||
-              'black'
-          }}
-          _hover={{ bg: 'gray.200' }}
-        >
-          {currentStatus}
-        </MenuButton>
+  isEditable: boolean;
+}> = ({ currentStatus, transitions, onChange, isEditable }) => {
+  const [isOpen, setIsOpen] = useState(false);
 
-        <MenuList>
-          {transitions.map(status => (
-            <MenuItem key={status} onClick={() => onChange(status)}>
-              {currentStatus} → {status}
-            </MenuItem>
-          ))}
-        </MenuList>
-      </>
-    )}
-  </Menu>
-);
+  return (
+    <Menu isOpen={isEditable && isOpen} onClose={() => setIsOpen(false)}>
+      {({ isOpen }) => (
+        <>
+          <MenuButton
+            as="div"
+            role="button"
+            cursor={transitions.length > 0 ? 'pointer' : 'default'}
+            tabIndex={0}
+            onClick={() => setIsOpen(!isOpen)}
+            style={{
+              padding: '8px',
+              borderWidth: '1px',
+              borderRadius: '4px',
+              borderColor:
+                statusColors[currentStatus as keyof typeof statusColors] ||
+                'black'
+            }}
+            _hover={{ bg: 'gray.200' }}
+          >
+            {currentStatus}
+          </MenuButton>
+
+          {transitions.length > 0 && (
+            <MenuList>
+              {transitions.map(status => (
+                <MenuItem key={status} onClick={() => onChange(status)}>
+                  {currentStatus} → {status}
+                </MenuItem>
+              ))}
+            </MenuList>
+          )}
+        </>
+      )}
+    </Menu>
+  );
+};
 
 const ListAccordion: React.FC<ListAccordionProps> = ({
   title,
@@ -136,6 +141,9 @@ const ListAccordion: React.FC<ListAccordionProps> = ({
   const endIndex = startIndex + pageSize;
   const currentData = filteredData.slice(startIndex, endIndex);
 
+  const areFieldsEditable =
+    handleDelete != undefined || handleUpdate != undefined;
+
   return (
     <Box p={4} maxWidth="80%" margin="auto">
       <Flex direction="column" gap={5}>
@@ -143,7 +151,7 @@ const ListAccordion: React.FC<ListAccordionProps> = ({
           Lista de {title}
         </Heading>
         <Flex gap="4" justifyContent="center" alignItems="center">
-          <CreateButton {...createButton} />
+          {createButton && <CreateButton {...createButton} />}
           <Input
             placeholder="Buscar"
             value={filter}
@@ -191,15 +199,20 @@ const ListAccordion: React.FC<ListAccordionProps> = ({
                     onChange={newStatus =>
                       updateOrder(order._id, 'status', newStatus)
                     }
+                    isEditable={areFieldsEditable}
                   />
                   <Editable
+                    isDisabled={!areFieldsEditable}
                     defaultValue={`${order.price.toString()}€`}
-                    onChange={value =>
-                      updateOrder(
-                        order._id,
-                        'price',
-                        Number.parseFloat(value.split('€')[0])
-                      )
+                    onChange={
+                      areFieldsEditable
+                        ? value =>
+                            updateOrder(
+                              order._id,
+                              'price',
+                              Number.parseFloat(value.split('€')[0])
+                            )
+                        : undefined
                     }
                   >
                     <EditablePreview />
@@ -210,7 +223,11 @@ const ListAccordion: React.FC<ListAccordionProps> = ({
               </AccordionButton>
               <AccordionPanel>
                 <Flex direction="column" gap="2">
+                  <Heading size="sm" mb="2">
+                    Cliente:
+                  </Heading>
                   <FiltrableSelect
+                    isDisabled={!areFieldsEditable}
                     options={users.map(user => ({
                       label: user.email,
                       value: user.id
@@ -221,7 +238,12 @@ const ListAccordion: React.FC<ListAccordionProps> = ({
                     }
                     placeholder="Seleccionar cliente"
                   />
+
+                  <Heading size="sm" mb="2">
+                    Dispositivo:
+                  </Heading>
                   <FiltrableSelect
+                    isDisabled={!areFieldsEditable}
                     options={devices.map(device => ({
                       label: `${device.type}-${device.brand}-${device.model}`,
                       value: device._id
@@ -232,7 +254,12 @@ const ListAccordion: React.FC<ListAccordionProps> = ({
                     }
                     placeholder="Seleccionar dispositivo"
                   />
+
+                  <Heading size="sm" mb="2">
+                    Técnico:
+                  </Heading>
                   <FiltrableSelect
+                    isDisabled={!areFieldsEditable}
                     options={users.map(user => ({
                       label: user.email,
                       value: user.id
@@ -243,11 +270,24 @@ const ListAccordion: React.FC<ListAccordionProps> = ({
                     }
                     placeholder="Seleccionar técnico"
                   />
+
+                  <Heading size="sm" mb="2">
+                    Descripción:
+                  </Heading>
                   <Editable
+                    isDisabled={!areFieldsEditable}
                     defaultValue={order.description}
-                    onChange={value =>
-                      updateOrder(order._id, 'description', value)
+                    onChange={
+                      areFieldsEditable
+                        ? value => updateOrder(order._id, 'description', value)
+                        : undefined
                     }
+                    style={{
+                      width: '100%',
+                      border: '1px solid #ccc',
+                      borderRadius: '4px',
+                      paddingLeft: '16px'
+                    }}
                   >
                     <EditablePreview />
                     <EditableInput />
@@ -259,22 +299,26 @@ const ListAccordion: React.FC<ListAccordionProps> = ({
                     justifyContent="center"
                     alignItems="center"
                   >
-                    <Button
-                      size="md"
-                      colorScheme="blue"
-                      leftIcon={<FaEdit />}
-                      onClick={() => handleUpdate(order)}
-                    >
-                      Actualizar
-                    </Button>
-                    <Button
-                      size="md"
-                      colorScheme="red"
-                      leftIcon={<FaTrash />}
-                      onClick={() => handleDelete(order._id)}
-                    >
-                      Eliminar
-                    </Button>
+                    {handleUpdate && (
+                      <Button
+                        size="md"
+                        colorScheme="blue"
+                        leftIcon={<FaEdit />}
+                        onClick={() => handleUpdate(order)}
+                      >
+                        Actualizar
+                      </Button>
+                    )}
+                    {handleDelete && (
+                      <Button
+                        size="md"
+                        colorScheme="red"
+                        leftIcon={<FaTrash />}
+                        onClick={() => handleDelete(order._id)}
+                      >
+                        Eliminar
+                      </Button>
+                    )}
                   </Flex>
                 </Flex>
               </AccordionPanel>

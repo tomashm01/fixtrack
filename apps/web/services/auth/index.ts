@@ -23,7 +23,10 @@ export const getRole = async (token: string | undefined) => {
 
   if (!roleResponse.role) return null;
 
-  return roleResponse.role;
+  return {
+    role: roleResponse.role,
+    id: roleResponse.id
+  };
 };
 
 export const removeToken = () => {

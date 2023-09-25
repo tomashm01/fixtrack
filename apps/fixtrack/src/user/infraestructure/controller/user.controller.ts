@@ -164,7 +164,8 @@ export class UserController {
     }
 
     return new RoleResponse(
-      (await this.userService.getUserById(userId.value)).role
+      (await this.userService.getUserById(userId.value)).role,
+      userId.value
     );
   }
 
