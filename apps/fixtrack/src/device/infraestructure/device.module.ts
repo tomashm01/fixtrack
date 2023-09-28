@@ -2,6 +2,7 @@ import { Event, EventStoreModule } from '@aulasoftwarelibre/nestjs-eventstore';
 import { CqrsModule } from '@nestjs/cqrs';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { WinstonModule } from 'nest-winston';
 
 import { DeviceDTO } from '@fixtrack/contracts';
 import { Device, DeviceWasCreated, DeviceWasDeleted } from '../domain';
@@ -16,6 +17,9 @@ import {
 } from './projection';
 import { DeviceMongoFinderService } from './service';
 import { DEVICE_FINDER } from '../application/service/device-finder.service';
+import { LoggerConfig } from '../../logger';
+
+const logger: LoggerConfig = new LoggerConfig();
 
 @Module({
   imports: [
@@ -36,7 +40,8 @@ import { DEVICE_FINDER } from '../application/service/device-finder.service';
         ),
       DeviceWasDeleted: (event: Event<DeviceDTO>) =>
         new DeviceWasDeleted(event.payload._id)
-    })
+    }),
+    WinstonModule.forRoot(logger.console())
   ],
   controllers: [DeviceController],
   providers: [

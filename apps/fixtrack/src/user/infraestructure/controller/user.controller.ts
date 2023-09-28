@@ -5,6 +5,7 @@ import {
   Delete,
   ForbiddenException,
   Get,
+  Inject,
   NotFoundException,
   Param,
   Post,
@@ -38,6 +39,8 @@ import { catchError } from '../../../utils';
 import { AuthService } from 'apps/fixtrack/src/auth/service/auth.service';
 import { UserId, UserNotFoundError } from '../../domain';
 import { MailService } from 'apps/fixtrack/src/mail.service';
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
+import { Logger } from 'winston';
 
 @ApiTags('UserController')
 @Controller('user')
@@ -45,7 +48,8 @@ export class UserController {
   constructor(
     private readonly userService: UserService,
     private readonly authService: AuthService,
-    private readonly mailService: MailService
+    private readonly mailService: MailService,
+    @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger
   ) {}
 
   @Get()
@@ -60,7 +64,9 @@ export class UserController {
   @ApiOkResponse({ type: UserDTO })
   async findOne(@Param('id') id: string): Promise<UserDTO | null> {
     try {
-      return await this.userService.getUserById(id);
+      const user: UserDTO = await this.userService.getUserById(id);
+      if (user) this.logger.info(`User was found`, { id: id });
+      return user;
     } catch (e) {
       if (e instanceof IdNotFoundError) {
         throw new NotFoundException('User not found');

@@ -26,6 +26,10 @@ import {
 } from './projection';
 import { UserModule } from '../../user';
 import { DeviceModule } from '../../device';
+import { LoggerConfig } from '../../logger';
+import { WinstonModule } from 'nest-winston';
+
+const logger: LoggerConfig = new LoggerConfig();
 
 @Module({
   imports: [
@@ -64,7 +68,8 @@ import { DeviceModule } from '../../device';
         ),
       WorkOrderWasDeleted: (event: Event<DeleteWorkOrderDTO>) =>
         new WorkOrderWasDeleted(event.payload._id)
-    })
+    }),
+    WinstonModule.forRoot(logger.console())
   ],
   controllers: [WorkOrderController],
   providers: [
